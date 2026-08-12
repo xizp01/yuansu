@@ -23,6 +23,6 @@ public class Protium extends Liquid {
         explosiveness = 1.2f;
         viscosity = 0.04f;
         temperature = 25f;
-        gaseous = true;
+        gas = true;
     }
 }
