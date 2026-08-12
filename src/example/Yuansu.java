@@ -1,21 +1,16 @@
 package example;
 
-import arc.*;
-import arc.util.*;
-import example.gas.Protium; //重点导入气体
-import mindustry.mod.*;
+import arc.util.Log;
+import example.liquid.Protium;
+import mindustry.mod.Mod;
 
 public class Yuansu extends Mod{
-
-    public Yuansu(){
-        Log.info("Loaded Yuansu constructor.");
-    }
+    public static Protium protium;
 
     @Override
     public void loadContent(){
-        Log.info("Loading some example content.");
+        Log.info("【元素模组】开始加载内容");
         protium = new Protium();
         protium.load();
     }
-
 }
