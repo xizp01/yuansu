@@ -17,7 +17,7 @@ description: "自定义模组"
 version: 1.0
 
 #the minimum game build required to run this mod
-minGameVersion: 159
+minGameVersion: 159.7
 
 #this is a java mod
 java: true
