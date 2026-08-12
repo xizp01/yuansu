@@ -8,7 +8,7 @@ name: "yuansu-mod"
 author: "gamm"
 
 #the fully qualified main class of the mod
-main: "example.ExampleJavaMod"
+main: "example.Yuansu"
 
 #the mod description as seen in the mod dialog
 description: "自定义模组"
