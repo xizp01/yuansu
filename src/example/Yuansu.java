@@ -4,10 +4,10 @@ import arc.*;
 import arc.util.*;
 import mindustry.mod.*;
 
-public class ExampleJavaMod extends Mod{
+public class Yuansu extends Mod{
 
-    public ExampleJavaMod(){
-        Log.info("Loaded ExampleJavaMod constructor.");
+    public Yuansu(){
+        Log.info("Loaded Yuansu constructor.");
     }
 
     @Override
