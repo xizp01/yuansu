@@ -1,6 +1,7 @@
 package example;
 
 import arc.util.Log;
+import example.liquid.Protium;
 import mindustry.mod.Mod;
 
 public class Yuansu extends Mod{
