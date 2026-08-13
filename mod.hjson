@@ -8,7 +8,7 @@ name: "yuansu"
 author: "ganm"
 
 #the fully qualified main class of the mod
-main: "ganm.yaunsu"
+main: "ganm.Yaunsu"
 
 #the mod description as seen in the mod dialog
 description: "元素模组."
