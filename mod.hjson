@@ -1,17 +1,17 @@
 #the mod name as displayed in-game
-displayName: "yuansumod"
+displayName: "元素"
 
 #the internal name of your mod
-name: "yuansu-mod"
+name: "yuansu"
 
 #your name
-author: "gamm"
+author: "ganm"
 
 #the fully qualified main class of the mod
-main: "example.Yuansu"
+main: "ganm.yaunsu"
 
 #the mod description as seen in the mod dialog
-description: "自定义模组"
+description: "元素模组."
 
 #the mod version
 version: 1.0
