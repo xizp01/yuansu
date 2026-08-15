@@ -1,33 +1,14 @@
 package ganm;
 
-import arc.*;
-import arc.util.*;
-import mindustry.game.EventType.*;
-import mindustry.mod.*;
-import mindustry.ui.dialogs.*;
+import arc.util.Log;
+import mindustry.mod.Mod;
 
 public class Yuansu extends Mod{
 
-    public Yuansu(){
-        Log.info("Loaded ExampleJavaMod constructor.");
-
-        //listen for game load event
-        Events.on(ClientLoadEvent.class, e -> {
-            //show dialog upon startup
-            Time.runTask(10f, () -> {
-                BaseDialog dialog = new BaseDialog("frog");
-                dialog.cont.add("behold").row();
-                //mod sprites are prefixed with the mod name (this mod is called 'example-java-mod' in its config)
-                dialog.cont.image(Core.atlas.find("yuansu-frog")).pad(20f).row();
-                dialog.cont.button("I see", dialog::hide).size(100f, 50f);
-                dialog.show();
-            });
-        });
-    }
-
     @Override
     public void loadContent(){
-        Log.info("Loading some example content.");
+        Log.info("【元素模组】正在加载内容");
+        //以后在这里写 new Protium().register(); 注册氕气
     }
 
 }
