@@ -82,8 +82,8 @@ jar{
     from("assets/"){
         include "**"
     }
-    from("bundles/"){
-        include "**"
+    from(projectDir){
+        include "bundles/**"
     }
 }
 
