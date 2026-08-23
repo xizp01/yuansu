@@ -1,6 +1,8 @@
 package ganm;
 
+import arc.struct.*;
 import arc.util.*;
+import mindustry.ctype.*;
 import mindustry.mod.*;
 import mindustry.content.Blocks;
 import mindustry.content.Planets;
@@ -21,23 +23,36 @@ public class Yuansu extends Mod{
         Log.info("Yuansu mod content loaded.");
     }
 
+    // 递归查找科技树节点
+    private TechNode findNode(Seq<TechNode> nodes, UnlockableContent content){
+        for(TechNode node : nodes){
+            if(node.content == content) return node;
+            TechNode found = findNode(node.children, content);
+            if(found != null) return found;
+        }
+        return null;
+    }
+
     @Override
     public void init(){
-        // 挂载科技树到埃里克尔：分离机挂在电解机下面，氕气挂在分离机下面
-        TechNode[] tmp = new TechNode[]{null};
-        Planets.erekir.techTree.each(node -> {
-            if(node.content == Blocks.electrolyzer) tmp[0] = node;
-        });
+        // 递归查找埃里克尔科技树中的电解机节点
+        TechNode electrolyzerNode = findNode(Planets.erekir.techTree, Blocks.electrolyzer);
 
-        if(tmp[0] != null){
-            TechNode separatorNode = node(YuansuBlocks.protiumSeparator, () -> {
-                nodeProduce(YuansuLiquids.protium, () -> {});
-            });
-            separatorNode.parent = tmp[0];
-            tmp[0].children.add(separatorNode);
-            Log.info("Yuansu tech tree attached.");
+        TechNode parentNode;
+        if(electrolyzerNode != null){
+            parentNode = electrolyzerNode;
+            Log.info("Found electrolyzer in Erekir tech tree.");
         }else{
-            Log.err("Could not find electrolyzer tech node!");
+            // 兜底：挂在埃里克尔科技树根节点下
+            parentNode = Planets.erekir.techTree.first();
+            Log.err("Could not find electrolyzer, attaching to root node instead.");
         }
+
+        TechNode separatorNode = node(YuansuBlocks.protiumSeparator, () -> {
+            nodeProduce(YuansuLiquids.protium, () -> {});
+        });
+        separatorNode.parent = parentNode;
+        parentNode.children.add(separatorNode);
+        Log.info("Yuansu tech tree attached to Erekir.");
     }
 }
