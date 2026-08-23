@@ -23,9 +23,9 @@ public class Yuansu extends Mod{
 
     @Override
     public void init(){
-        // 挂载科技树：分离机挂在电解机下面，氕气挂在分离机下面
+        // 挂载科技树到埃里克尔：分离机挂在电解机下面，氕气挂在分离机下面
         TechNode[] tmp = new TechNode[]{null};
-        Planets.serpulo.techTree.each(node -> {
+        Planets.erekir.techTree.each(node -> {
             if(node.content == Blocks.electrolyzer) tmp[0] = node;
         });
 
