@@ -7,6 +7,7 @@ import mindustry.world.Block;
 import mindustry.world.blocks.production.GenericCrafter;
 import mindustry.content.Items;
 import mindustry.content.Liquids;
+import mindustry.content.Planets;
 
 public class YuansuBlocks {
     public static Block protiumSeparator;
@@ -27,6 +28,8 @@ public class YuansuBlocks {
             outputLiquid = new LiquidStack(YuansuLiquids.protium, 8f);
             consumeLiquid(Liquids.hydrogen, 10f);
             consumePower(1.5f);
+            // 限定在埃里克尔星球显示
+            shownPlanets.add(Planets.erekir);
         }};
     }
 }
