@@ -31,7 +31,7 @@ public class Yuansu extends Mod{
 
         if(tmp[0] != null){
             TechNode separatorNode = node(YuansuBlocks.protiumSeparator, () -> {
-                nodeProduce(YuansuLiquids.protium);
+                nodeProduce(YuansuLiquids.protium, () -> {});
             });
             separatorNode.parent = tmp[0];
             tmp[0].children.add(separatorNode);
