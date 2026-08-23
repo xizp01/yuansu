@@ -2,6 +2,8 @@ package ganm;
 
 import arc.util.*;
 import mindustry.mod.*;
+import ganm.content.YuansuLiquids;
+import ganm.content.YuansuBlocks;
 
 public class Yuansu extends Mod{
     public Yuansu(){
@@ -10,6 +12,8 @@ public class Yuansu extends Mod{
 
     @Override
     public void loadContent(){
-        Log.info("Loading some example content.");
+        YuansuLiquids.load();
+        YuansuBlocks.load();
+        Log.info("Yuansu mod content loaded.");
     }
 }
