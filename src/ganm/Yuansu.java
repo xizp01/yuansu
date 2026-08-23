@@ -1,14 +1,15 @@
 package ganm;
 
-import arc.util.Log;
-import mindustry.mod.Mod;
+import arc.util.*;
+import mindustry.mod.*;
 
 public class Yuansu extends Mod{
+    public Yuansu(){
+        Log.info("Loaded Yuansu constructor.");
+    }
 
     @Override
     public void loadContent(){
-        Log.info("【元素模组】正在加载内容");
-        //以后在这里写 new Protium().register(); 注册氕气
+        Log.info("Loading some example content.");
     }
-
 }
