@@ -1,6 +1,5 @@
 package ganm;
 
-import arc.struct.*;
 import arc.util.*;
 import mindustry.ctype.*;
 import mindustry.mod.*;
@@ -24,10 +23,10 @@ public class Yuansu extends Mod{
     }
 
     // 递归查找科技树节点
-    private TechNode findNode(Seq<TechNode> nodes, UnlockableContent content){
-        for(TechNode node : nodes){
-            if(node.content == content) return node;
-            TechNode found = findNode(node.children, content);
+    private TechNode findNode(TechNode node, UnlockableContent content){
+        if(node.content == content) return node;
+        for(TechNode child : node.children){
+            TechNode found = findNode(child, content);
             if(found != null) return found;
         }
         return null;
@@ -44,7 +43,7 @@ public class Yuansu extends Mod{
             Log.info("Found electrolyzer in Erekir tech tree.");
         }else{
             // 兜底：挂在埃里克尔科技树根节点下
-            parentNode = Planets.erekir.techTree.first();
+            parentNode = Planets.erekir.techTree;
             Log.err("Could not find electrolyzer, attaching to root node instead.");
         }
 
