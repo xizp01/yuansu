@@ -22,7 +22,6 @@ public class Yuansu extends Mod{
         Log.info("Yuansu mod content loaded.");
     }
 
-    // 递归查找科技树节点
     private TechNode findNode(TechNode node, UnlockableContent content){
         if(node.content == content) return node;
         for(TechNode child : node.children){
@@ -34,24 +33,30 @@ public class Yuansu extends Mod{
 
     @Override
     public void init(){
-        // 递归查找埃里克尔科技树中的电解机节点
         TechNode electrolyzerNode = findNode(Planets.erekir.techTree, Blocks.electrolyzer);
+        TechNode parentNode = (electrolyzerNode != null) ? electrolyzerNode : Planets.erekir.techTree;
 
-        TechNode parentNode;
-        if(electrolyzerNode != null){
-            parentNode = electrolyzerNode;
-            Log.info("Found electrolyzer in Erekir tech tree.");
-        }else{
-            // 兜底：挂在埃里克尔科技树根节点下
-            parentNode = Planets.erekir.techTree;
-            Log.err("Could not find electrolyzer, attaching to root node instead.");
-        }
-
-        TechNode separatorNode = node(YuansuBlocks.protiumSeparator, () -> {
+        // 氕气分离机 -> 氕气
+        TechNode protiumNode = node(YuansuBlocks.protiumSeparator, () -> {
             nodeProduce(YuansuLiquids.protium, () -> {});
         });
-        separatorNode.parent = parentNode;
-        parentNode.children.add(separatorNode);
+        protiumNode.parent = parentNode;
+        parentNode.children.add(protiumNode);
+
+        // 氘气分离机 -> 氘气（挂在氕气分离机下）
+        TechNode deuteriumNode = node(YuansuBlocks.deuteriumSeparator, () -> {
+            nodeProduce(YuansuLiquids.deuterium, () -> {});
+        });
+        deuteriumNode.parent = protiumNode;
+        protiumNode.children.add(deuteriumNode);
+
+        // 氚气分离机 -> 氚气（挂在氘气分离机下）
+        TechNode tritiumNode = node(YuansuBlocks.tritiumSeparator, () -> {
+            nodeProduce(YuansuLiquids.tritium, () -> {});
+        });
+        tritiumNode.parent = deuteriumNode;
+        deuteriumNode.children.add(tritiumNode);
+
         Log.info("Yuansu tech tree attached to Erekir.");
     }
 }
