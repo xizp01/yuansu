@@ -9,41 +9,38 @@ import mindustry.content.Items;
 import mindustry.content.Liquids;
 import mindustry.content.Planets;
 import mindustry.content.Fx;
-import ganm.content.liquids.Deuterium;
 
 /**
- * 氘气分离机
- * 通过多级精馏工艺，从氢气中提取稀有氘气，效率较低。
- * 所属星球：埃里克尔、塞普罗
+ * 塞普罗电解制氢机
+ * 通过电解水制取氢气，为塞普罗同位素分离产业链提供原料。
+ * 所属星球：塞普罗
  */
-public class DeuteriumSeparator {
+public class SerpuloElectrolyzer {
     public static Block block;
 
     public static void load() {
-        block = new GenericCrafter("deuterium-separator") {{
+        block = new GenericCrafter("serpulo-electrolyzer") {{
             requirements(Category.crafting, ItemStack.with(
                 Items.copper, 40,
                 Items.lead, 30,
                 Items.titanium, 15,
-                Items.silicon, 15,
-                Items.metaglass, 10
+                Items.silicon, 20
             ));
             size = 2;
             health = 200;
-            craftTime = 180f;
+            craftTime = 60f;
             hasPower = true;
             hasLiquids = true;
-            liquidCapacity = 12f;
-            outputLiquid = new LiquidStack(Deuterium.liquid, 1.5f);
-            consumeLiquid(Liquids.hydrogen, 6f);
-            consumePower(1.5f);
-            shownPlanets.add(Planets.erekir);
+            liquidCapacity = 15f;
+            outputLiquid = new LiquidStack(Liquids.hydrogen, 6f);
+            consumeLiquid(Liquids.water, 10f);
+            consumePower(2.0f);
             shownPlanets.add(Planets.serpulo);
             craftEffect = Fx.vapor;
             updateEffect = Fx.steam;
-            updateEffectChance = 0.05f;
-            updateEffectSpread = 5f;
-            warmupSpeed = 0.015f;
+            updateEffectChance = 0.1f;
+            updateEffectSpread = 6f;
+            warmupSpeed = 0.03f;
         }};
     }
 }

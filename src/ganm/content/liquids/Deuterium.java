@@ -7,7 +7,7 @@ import mindustry.content.Planets;
 /**
  * 氘气（重氢）
  * 氢的稳定同位素，核聚变的主要燃料之一，可用于中子慢化剂和特种化工。
- * 所属星球：埃里克尔
+ * 所属星球：埃里克尔、塞普罗
  */
 public class Deuterium {
     public static Liquid liquid;
@@ -21,6 +21,7 @@ public class Deuterium {
             heatCapacity = 0.35f;
             barColor = Color.valueOf("5a6ab0");
             shownPlanets.add(Planets.erekir);
+            shownPlanets.add(Planets.serpulo);
         }};
     }
 }

@@ -14,7 +14,7 @@ import ganm.content.liquids.Tritium;
 /**
  * 氚气分离机
  * 通过高精度同位素分离工艺，从氢气中提取微量氚气，需要高级材料。
- * 所属星球：埃里克尔
+ * 所属星球：埃里克尔、塞普罗
  */
 public class TritiumSeparator {
     public static Block block;
@@ -39,6 +39,7 @@ public class TritiumSeparator {
             consumeLiquid(Liquids.hydrogen, 8f);
             consumePower(2.0f);
             shownPlanets.add(Planets.erekir);
+            shownPlanets.add(Planets.serpulo);
             craftEffect = Fx.vapor;
             updateEffect = Fx.steam;
             updateEffectChance = 0.04f;

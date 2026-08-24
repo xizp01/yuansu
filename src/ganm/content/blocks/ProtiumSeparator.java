@@ -14,7 +14,7 @@ import ganm.content.liquids.Protium;
 /**
  * 氕气分离机
  * 通过电解分离工艺，从氢气中提取高纯度氕气，是同位素分离的基础设备。
- * 所属星球：埃里克尔
+ * 所属星球：埃里克尔、塞普罗
  */
 public class ProtiumSeparator {
     public static Block block;
@@ -37,6 +37,7 @@ public class ProtiumSeparator {
             consumeLiquid(Liquids.hydrogen, 5f);
             consumePower(1.0f);
             shownPlanets.add(Planets.erekir);
+            shownPlanets.add(Planets.serpulo);
             craftEffect = Fx.vapor;
             updateEffect = Fx.steam;
             updateEffectChance = 0.06f;

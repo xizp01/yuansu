@@ -7,7 +7,7 @@ import mindustry.content.Planets;
 /**
  * 氚气（超重氢）
  * 氢的放射性同位素，核聚变的关键燃料，半衰期约12.3年。
- * 所属星球：埃里克尔
+ * 所属星球：埃里克尔、塞普罗
  */
 public class Tritium {
     public static Liquid liquid;
@@ -21,6 +21,7 @@ public class Tritium {
             heatCapacity = 0.4f;
             barColor = Color.valueOf("3a4a90");
             shownPlanets.add(Planets.erekir);
+            shownPlanets.add(Planets.serpulo);
         }};
     }
 }

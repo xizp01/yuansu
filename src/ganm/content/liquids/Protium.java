@@ -7,7 +7,7 @@ import mindustry.content.Planets;
 /**
  * 氕气（轻氢）
  * 基础能源气体，可做燃料、化工原料；聚变反应很难直接使用，需要分离氘氚。
- * 所属星球：埃里克尔
+ * 所属星球：埃里克尔、塞普罗
  */
 public class Protium {
     public static Liquid liquid;
@@ -21,6 +21,7 @@ public class Protium {
             heatCapacity = 0.3f;
             barColor = Color.valueOf("8a9ae0");
             shownPlanets.add(Planets.erekir);
+            shownPlanets.add(Planets.serpulo);
         }};
     }
 }
