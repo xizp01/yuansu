@@ -31,7 +31,6 @@ public class YuansuLiquids {
             viscosity = 0.14f;
             temperature = 0.25f;
             heatCapacity = 0.4f;
-            radioactivity = 0.3f;
             barColor = Color.valueOf("3a4a90");
         }};
     }
