@@ -30,12 +30,12 @@ public class DeuteriumSeparator {
             ));
             size = 2;
             health = 200;
-            craftTime = 180f;
+            craftTime = 240f;
             hasPower = true;
             hasLiquids = true;
-            liquidCapacity = 12f;
-            outputLiquid = new LiquidStack(Deuterium.liquid, 1.5f);
-            consumeLiquid(Liquids.hydrogen, 6f);
+            liquidCapacity = 20f;
+            outputLiquid = new LiquidStack(Deuterium.liquid, 1f);
+            consumeLiquid(Liquids.hydrogen, 15f);
             consumePower(1.5f);
             shownPlanets.add(Planets.erekir);
             shownPlanets.add(Planets.serpulo);

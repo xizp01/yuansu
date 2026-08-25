@@ -32,7 +32,7 @@ public class SerpuloElectrolyzer {
             hasPower = true;
             hasLiquids = true;
             liquidCapacity = 15f;
-            outputLiquid = new LiquidStack(Liquids.hydrogen, 6f);
+            outputLiquid = new LiquidStack(Liquids.hydrogen, 5f);
             consumeLiquid(Liquids.water, 10f);
             consumePower(2.0f);
             shownPlanets.add(Planets.serpulo);

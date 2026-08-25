@@ -33,7 +33,7 @@ public class ProtiumSeparator {
             hasPower = true;
             hasLiquids = true;
             liquidCapacity = 12f;
-            outputLiquid = new LiquidStack(Protium.liquid, 3f);
+            outputLiquid = new LiquidStack(Protium.liquid, 4f);
             consumeLiquid(Liquids.hydrogen, 5f);
             consumePower(1.0f);
             shownPlanets.add(Planets.erekir);

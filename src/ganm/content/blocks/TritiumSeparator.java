@@ -31,12 +31,12 @@ public class TritiumSeparator {
             ));
             size = 2;
             health = 240;
-            craftTime = 240f;
+            craftTime = 360f;
             hasPower = true;
             hasLiquids = true;
-            liquidCapacity = 12f;
+            liquidCapacity = 30f;
             outputLiquid = new LiquidStack(Tritium.liquid, 0.5f);
-            consumeLiquid(Liquids.hydrogen, 8f);
+            consumeLiquid(Liquids.hydrogen, 30f);
             consumePower(2.0f);
             shownPlanets.add(Planets.erekir);
             shownPlanets.add(Planets.serpulo);
