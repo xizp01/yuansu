@@ -10,12 +10,10 @@ import mindustry.content.Liquids;
 import mindustry.content.Planets;
 import mindustry.content.Fx;
 import ganm.content.liquids.Tritium;
-import ganm.content.status.Radiation;
 
 /**
  * 氚气分离机
  * 通过高精度同位素分离工艺，从氢气中提取微量氚气，需要高级材料。
- * 运行时周围会产生辐射区域，对单位造成辐射伤害。
  * 所属星球：埃里克尔、塞普罗
  */
 public class TritiumSeparator {
@@ -42,9 +40,6 @@ public class TritiumSeparator {
             consumePower(2.0f);
             shownPlanets.add(Planets.erekir);
             shownPlanets.add(Planets.serpulo);
-            // 辐射区域
-            status = Radiation.effect;
-            statusDuration = 300f;
             craftEffect = Fx.vapor;
             updateEffect = Fx.steam;
             updateEffectChance = 0.04f;
