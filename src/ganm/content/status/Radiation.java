@@ -2,7 +2,6 @@ package ganm.content.status;
 
 import arc.graphics.Color;
 import mindustry.type.StatusEffect;
-import mindustry.content.Fx;
 
 /**
  * 辐射状态
@@ -15,7 +14,6 @@ public class Radiation {
         effect = new StatusEffect("radiation") {{
             color = Color.valueOf("39ff14");
             damage = 0.15f;
-            effect = Fx.greenRipples;
             effectChance = 0.08f;
             healthMultiplier = 0.9f;
             speedMultiplier = 0.95f;
