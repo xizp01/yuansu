@@ -2,6 +2,7 @@ package ganm;
 
 import arc.util.*;
 import mindustry.mod.*;
+import ganm.content.status.Radiation;
 import ganm.content.liquids.Protium;
 import ganm.content.liquids.Deuterium;
 import ganm.content.liquids.Tritium;
@@ -14,7 +15,7 @@ import ganm.tech.SerpuloTechTree;
 
 /**
  * 元素模组主类
- * 内容：氕气、氘气、氚气及对应分离机，塞普罗制氢机
+ * 内容：氕气、氘气、氚气及对应分离机，塞普罗制氢机，辐射状态
  * 适配星球：埃里克尔、塞普罗
  */
 public class Yuansu extends Mod {
@@ -25,6 +26,8 @@ public class Yuansu extends Mod {
 
     @Override
     public void loadContent() {
+        // 状态效果（必须先加载，氚气会引用）
+        Radiation.load();
         // 气体
         Protium.load();
         Deuterium.load();
