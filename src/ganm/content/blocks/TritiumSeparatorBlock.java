@@ -49,8 +49,10 @@ public class TritiumSeparatorBlock extends GenericCrafter {
             super.update();
             // 机器运行时给周围单位施加辐射
             if (efficiency > 0) {
-                Units.nearby(x, y, radiationRange, unit -> {
-                    unit.applyStatus(Radiation.effect, radiationDuration);
+                Groups.unit.each(unit -> {
+                    if (unit.within(x, y, radiationRange)) {
+                        unit.applyStatus(Radiation.effect, radiationDuration);
+                    }
                 });
             }
         }
