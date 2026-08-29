@@ -51,7 +51,7 @@ public class TritiumSeparatorBlock extends GenericCrafter {
             if (efficiency > 0) {
                 Groups.unit.each(unit -> {
                     if (unit.within(x, y, radiationRange)) {
-                        unit.status.apply(Radiation.effect, radiationDuration);
+                        unit.applyStatus(Radiation.effect, radiationDuration, 0, false);
                     }
                 });
             }
