@@ -10,6 +10,7 @@ import static mindustry.content.TechTree.*;
 import ganm.content.liquids.Protium;
 import ganm.content.liquids.Deuterium;
 import ganm.content.liquids.Tritium;
+import ganm.content.liquids.Oxygen;
 import ganm.content.blocks.ProtiumSeparator;
 import ganm.content.blocks.DeuteriumSeparator;
 import ganm.content.blocks.TritiumSeparator;
@@ -39,8 +40,10 @@ public class SerpuloTechTree {
         TechNode pumpNode = findNode(Planets.serpulo.techTree, Blocks.waterExtractor);
         TechNode parentNode = (pumpNode != null) ? pumpNode : Planets.serpulo.techTree;
 
-        // 塞普罗制氢机
-        TechNode electrolyzerNode = node(SerpuloElectrolyzer.block, () -> {});
+        // 塞普罗制氢机 -> 氧气（副产品）
+        TechNode electrolyzerNode = node(SerpuloElectrolyzer.block, () -> {
+            nodeProduce(Oxygen.liquid, () -> {});
+        });
         electrolyzerNode.parent = parentNode;
         parentNode.children.add(electrolyzerNode);
 

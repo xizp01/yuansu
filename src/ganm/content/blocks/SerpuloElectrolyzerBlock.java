@@ -4,6 +4,7 @@ import mindustry.gen.*;
 import mindustry.type.*;
 import mindustry.world.blocks.production.*;
 import mindustry.content.*;
+import ganm.content.liquids.Oxygen;
 
 /**
  * 塞普罗电解制氢机（自定义方块类）
@@ -42,7 +43,7 @@ public class SerpuloElectrolyzerBlock extends GenericCrafter {
         public void craft() {
             super.craft();
             // 水电解：2H2O → 2H2 + O2，同时产出氧气
-            liquids.add(Liquids.oxygen, oxygenOutput);
+            liquids.add(Oxygen.liquid, oxygenOutput);
         }
     }
 }

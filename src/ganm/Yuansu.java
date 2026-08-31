@@ -6,6 +6,7 @@ import ganm.content.status.Radiation;
 import ganm.content.liquids.Protium;
 import ganm.content.liquids.Deuterium;
 import ganm.content.liquids.Tritium;
+import ganm.content.liquids.Oxygen;
 import ganm.content.blocks.ProtiumSeparator;
 import ganm.content.blocks.DeuteriumSeparator;
 import ganm.content.blocks.TritiumSeparator;
@@ -29,6 +30,7 @@ public class Yuansu extends Mod {
         // 状态效果（必须先加载，氚气会引用）
         Radiation.load();
         // 气体
+        Oxygen.load();
         Protium.load();
         Deuterium.load();
         Tritium.load();
