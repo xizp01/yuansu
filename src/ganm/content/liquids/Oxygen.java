@@ -18,8 +18,6 @@ public class Oxygen {
             heatCapacity = 0.5f;
             temperature = 0.5f;
             viscosity = 0.3f;
-            lightRadius = 30f;
-            lightColor = color.cpy().a(0.5f);
         }};
     }
 }
