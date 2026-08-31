@@ -65,7 +65,7 @@ public class TritiumSeparatorBlock extends GenericCrafter {
             super.draw();
             // 机器运行时绘制辐射光圈
             if (efficiency > 0) {
-                float pulse = 0.5f + 0.5f * Mathf.sin(Time.time * 1.5f);
+                float pulse = 0.5f + 0.5f * Mathf.sin(Time.time * 0.4f);
                 float radius = radiationRange * (0.92f + 0.08f * pulse);
                 // 半透明填充
                 Draw.color(57f / 255f, 1f, 20f / 255f, 0.08f + 0.06f * pulse);
