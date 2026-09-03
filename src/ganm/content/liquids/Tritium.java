@@ -20,6 +20,7 @@ public class Tritium {
             viscosity = 0.14f;
             temperature = 0.25f;
             heatCapacity = 0.4f;
+            radioactivity = 1.5f;
             barColor = Color.valueOf("3a4a90");
             shownPlanets.add(Planets.erekir);
             shownPlanets.add(Planets.serpulo);
