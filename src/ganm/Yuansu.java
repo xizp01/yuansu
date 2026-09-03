@@ -1,8 +1,10 @@
 package ganm;
 import arc.util.*;
+import arc.Events;
 import mindustry.mod.*;
 import mindustry.gen.Groups;
 import mindustry.game.EventType.Trigger;
+import mindustry.entities.Puddles;
 import ganm.content.status.Radiation;
 import ganm.content.liquids.Protium;
 import ganm.content.liquids.Deuterium;
@@ -47,10 +49,8 @@ public class Yuansu extends Mod {
         // 氚气辐射检测：气体不会形成水坑，主动检测单位所在位置的氚气并施加辐射
         Events.run(Trigger.update, () -> {
             Groups.unit.forEach(unit -> {
-                if (unit.tileOn() != null && unit.tileOn().getLiquid() != null) {
-                    if (unit.tileOn().getLiquid().liquid == Tritium.liquid) {
-                        unit.apply(Radiation.effect, 120f);
-                    }
+                if (unit.tileOn() != null && Puddles.hasLiquid(unit.tileOn(), Tritium.liquid)) {
+                    unit.apply(Radiation.effect, 120f);
                 }
             });
         });
