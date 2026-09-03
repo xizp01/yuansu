@@ -1,7 +1,7 @@
 package ganm.content.blocks;
 
-import arc.graphics.g2d.*;
 import arc.math.*;
+import mindustry.entities.*;
 import mindustry.gen.*;
 import mindustry.type.*;
 import mindustry.world.*;
@@ -17,6 +17,9 @@ public class SerpuloElectrolyzerBlock extends Block {
     public float craftTime = 60f;
     public float hydrogenOutput = 5f;
     public float oxygenOutput = 2.5f;
+    public Effect craftEffect = Fx.vapor;
+    public Effect updateEffect = Fx.steam;
+    public float updateEffectChance = 0.1f;
 
     public SerpuloElectrolyzerBlock(String name) {
         super(name);
@@ -31,17 +34,10 @@ public class SerpuloElectrolyzerBlock extends Block {
         hasPower = true;
         hasLiquids = true;
         liquidCapacity = 30f;
-        // UI显示用：显示氢气输出
-        outputLiquid = new LiquidStack(Liquids.hydrogen, 5f);
         // 消耗配置
         consumeLiquid(Liquids.water, 10f);
         consumePower(2.0f);
         shownPlanets.add(Planets.serpulo);
-        craftEffect = Fx.vapor;
-        updateEffect = Fx.steam;
-        updateEffectChance = 0.1f;
-        updateEffectSpread = 6f;
-        warmupSpeed = 0.03f;
     }
 
     public class SerpuloElectrolyzerBuild extends Building {
@@ -51,19 +47,16 @@ public class SerpuloElectrolyzerBlock extends Block {
         @Override
         public void update() {
             super.update();
-            // 预热
             warmup = Mathf.lerpDelta(warmup, efficiency > 0 ? 1f : 0f, 0.05f);
 
             if (efficiency > 0) {
                 progress += 1f / craftTime * efficiency;
-                // 制作特效
                 if (Mathf.random() < updateEffectChance * efficiency) {
                     updateEffect.at(x + Mathf.range(size * 4f), y + Mathf.range(size * 4f));
                 }
                 if (progress >= 1f) {
                     progress = 0f;
                     craftEffect.at(x, y);
-                    // 添加产出到液体容器
                     liquids.add(Liquids.hydrogen, hydrogenOutput);
                     liquids.add(Oxygen.liquid, oxygenOutput);
                 }
@@ -90,7 +83,6 @@ public class SerpuloElectrolyzerBlock extends Block {
 
         @Override
         public boolean acceptLiquid(Building source, Liquid liquid) {
-            // 只接受水作为输入
             return liquid == Liquids.water;
         }
 
