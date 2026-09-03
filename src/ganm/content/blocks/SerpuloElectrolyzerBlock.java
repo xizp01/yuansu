@@ -29,6 +29,8 @@ public class SerpuloElectrolyzerBlock extends GenericCrafter {
             new LiquidStack(Liquids.hydrogen, 5f),
             new LiquidStack(Oxygen.liquid, 2.5f)
         };
+        // 分方向输出：氢气从右(0)，氧气从左(2)，旋转方块时方向跟随旋转
+        liquidOutputDirections = new int[]{0, 2};
         consumeLiquid(Liquids.water, 10f);
         consumePower(2.0f);
         shownPlanets.add(Planets.serpulo);
