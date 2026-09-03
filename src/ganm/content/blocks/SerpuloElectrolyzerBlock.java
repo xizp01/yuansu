@@ -46,6 +46,10 @@ public class SerpuloElectrolyzerBlock extends GenericCrafter {
             if (efficiency > 0) {
                 float perFrame = oxygenOutput / craftTime * efficiency;
                 liquids.add(Oxygen.liquid, perFrame);
+                // 手动将氧气输出到相邻管道（GenericCrafter默认只输出outputLiquid）
+                for (int i = 0; i < 4; i++) {
+                    dumpLiquid(Oxygen.liquid, i);
+                }
             }
         }
     }
