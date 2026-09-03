@@ -40,10 +40,13 @@ public class SerpuloElectrolyzerBlock extends GenericCrafter {
 
     public class SerpuloElectrolyzerBuild extends GenericCrafterBuild {
         @Override
-        public void craft() {
-            super.craft();
-            // 水电解：2H2O → 2H2 + O2，同时产出氧气
-            liquids.add(Oxygen.liquid, oxygenOutput);
+        public void update() {
+            super.update();
+            // 机器运行时持续产出氧气（与氢气同步，比例2:1）
+            if (efficiency > 0) {
+                float perFrame = oxygenOutput / craftTime * efficiency;
+                liquids.add(Oxygen.liquid, perFrame);
+            }
         }
     }
 }
