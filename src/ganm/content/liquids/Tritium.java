@@ -13,7 +13,7 @@ public class Tritium {
     public static Liquid liquid;
     public static void load() {
         liquid = new Liquid("tritium", Color.valueOf("5a6ab0")) {{
-            gas = true;
+            gas = false;
             flammability = 0.8f;
             viscosity = 0.14f;
             temperature = 0.25f;
