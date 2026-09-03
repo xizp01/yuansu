@@ -1,10 +1,11 @@
 package ganm;
 import arc.util.*;
 import arc.Events;
+import arc.struct.Seq;
+import arc.graphics.g2d.*;
+import arc.math.*;
 import mindustry.mod.*;
-import mindustry.gen.Groups;
 import mindustry.game.EventType.Trigger;
-import mindustry.entities.Puddles;
 import ganm.content.status.Radiation;
 import ganm.content.liquids.Protium;
 import ganm.content.liquids.Deuterium;
@@ -14,6 +15,7 @@ import ganm.content.blocks.ProtiumSeparator;
 import ganm.content.blocks.DeuteriumSeparator;
 import ganm.content.blocks.TritiumSeparator;
 import ganm.content.blocks.SerpuloElectrolyzer;
+import ganm.content.entities.TritiumParticle;
 import ganm.tech.ErekirTechTree;
 import ganm.tech.SerpuloTechTree;
 /**
@@ -22,6 +24,10 @@ import ganm.tech.SerpuloTechTree;
  * 适配星球：埃里克尔、塞普罗
  */
 public class Yuansu extends Mod {
+    // 氚气放射性粒子列表
+    public static Seq<TritiumParticle> tritiumParticles = new Seq<>();
+    // 粒子数量上限，防止卡顿
+    public static final int MAX_PARTICLES = 200;
     public Yuansu() {
         Log.info("Loaded Yuansu constructor.");
     }
@@ -46,13 +52,28 @@ public class Yuansu extends Mod {
         // 科技树（双星球）
         ErekirTechTree.load();
         SerpuloTechTree.load();
-        // 氚气辐射检测：气体不会形成水坑，主动检测单位所在位置的氚气并施加辐射
+        // 氚气粒子更新
         Events.run(Trigger.update, () -> {
-            Groups.unit.forEach(unit -> {
-                if (unit.tileOn() != null && Puddles.hasLiquid(unit.tileOn(), Tritium.liquid)) {
-                    unit.apply(Radiation.effect, 120f);
+            for (int i = tritiumParticles.size - 1; i >= 0; i--) {
+                TritiumParticle p = tritiumParticles.get(i);
+                p.update();
+                if (p.isDead()) {
+                    tritiumParticles.remove(i);
                 }
-            });
+            }
+        });
+        // 氚气粒子绘制
+        Events.run(Trigger.draw, () -> {
+            for (TritiumParticle p : tritiumParticles) {
+                float alpha = Mathf.clamp(p.life / p.maxLife);
+                // 外层光晕
+                Draw.color(57f / 255f, 1f, 20f / 255f, alpha * 0.25f);
+                Fill.circle(p.x, p.y, p.radius + 2f);
+                // 核心
+                Draw.color(57f / 255f, 1f, 20f / 255f, alpha * 0.7f);
+                Fill.circle(p.x, p.y, p.radius * 0.6f);
+            }
+            Draw.reset();
         });
     }
 }

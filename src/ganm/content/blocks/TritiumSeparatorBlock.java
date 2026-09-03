@@ -1,5 +1,4 @@
 package ganm.content.blocks;
-
 import arc.graphics.g2d.*;
 import arc.math.*;
 import arc.util.*;
@@ -7,17 +6,15 @@ import mindustry.gen.*;
 import mindustry.type.*;
 import mindustry.world.blocks.production.*;
 import mindustry.content.*;
+import ganm.Yuansu;
 import ganm.content.liquids.Tritium;
-import ganm.content.status.Radiation;
-
+import ganm.content.entities.TritiumParticle;
 /**
  * 氚气分离机（自定义方块类）
- * 运行时周围会产生辐射区域，对范围内单位持续施加辐射状态，并显示辐射光圈。
+ * 运行时释放氚气放射性粒子，粒子飘散过程中碰到单位会施加辐射状态。
  */
 public class TritiumSeparatorBlock extends GenericCrafter {
-    public float radiationRange = 48f;
-    public float radiationDuration = 180f;
-
+    public float particleSpawnChance = 0.4f;
     public TritiumSeparatorBlock(String name) {
         super(name);
         requirements(Category.crafting, ItemStack.with(
@@ -45,35 +42,29 @@ public class TritiumSeparatorBlock extends GenericCrafter {
         updateEffectSpread = 5f;
         warmupSpeed = 0.01f;
     }
-
     public class TritiumSeparatorBuild extends GenericCrafterBuild {
         @Override
         public void update() {
             super.update();
-            // 机器运行时给周围单位施加辐射
-            if (efficiency > 0) {
-                Groups.unit.each((mindustry.gen.Unit unit) -> {
-                    if (unit.within(x, y, radiationRange)) {
-                        unit.apply(Radiation.effect, radiationDuration);
-                    }
-                });
+            // 机器运行时释放氚气放射性粒子
+            if (efficiency > 0 && Yuansu.tritiumParticles.size < Yuansu.MAX_PARTICLES) {
+                if (Mathf.random() < particleSpawnChance) {
+                    // 在机器周围随机位置生成粒子
+                    float px = x + Mathf.range(size * 3.5f);
+                    float py = y + Mathf.range(size * 3.5f);
+                    Yuansu.tritiumParticles.add(new TritiumParticle(px, py));
+                }
             }
         }
-
         @Override
         public void draw() {
             super.draw();
-            // 机器运行时绘制辐射光圈
+            // 机器运行时绘制微弱的辐射光晕
             if (efficiency > 0) {
                 float pulse = 0.5f + 0.5f * Mathf.sin(Time.time * 0.4f);
-                float radius = radiationRange * (0.92f + 0.08f * pulse);
-                // 半透明填充
-                Draw.color(57f / 255f, 1f, 20f / 255f, 0.08f + 0.06f * pulse);
+                float radius = size * 4f * (0.9f + 0.1f * pulse);
+                Draw.color(57f / 255f, 1f, 20f / 255f, 0.05f + 0.03f * pulse);
                 Fill.circle(x, y, radius);
-                // 圆环边框
-                Draw.color(57f / 255f, 1f, 20f / 255f, 0.35f + 0.25f * pulse);
-                Lines.stroke(1.5f + pulse);
-                Lines.circle(x, y, radius);
                 Draw.reset();
             }
         }
