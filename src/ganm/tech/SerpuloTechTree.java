@@ -1,5 +1,4 @@
 package ganm.tech;
-
 import arc.util.*;
 import mindustry.ctype.*;
 import mindustry.content.Blocks;
@@ -15,14 +14,11 @@ import ganm.content.blocks.ProtiumSeparator;
 import ganm.content.blocks.DeuteriumSeparator;
 import ganm.content.blocks.TritiumSeparator;
 import ganm.content.blocks.SerpuloElectrolyzer;
-
 /**
  * 塞普罗星球科技树注册
- * 结构：制氢机 -> 氕气分离机 -> 氘气分离机 -> 氚气分离机
- * 同时将原版氢气开放到塞普罗星球
+ * 结构：水泵 -> 氢气 -> 制氢机 -> 氕气分离机 -> 氘气分离机 -> 氚气分离机
  */
 public class SerpuloTechTree {
-
     private static TechNode findNode(TechNode node, UnlockableContent content) {
         if (node.content == content) return node;
         for (TechNode child : node.children) {
@@ -31,43 +27,40 @@ public class SerpuloTechTree {
         }
         return null;
     }
-
     public static void load() {
         // 将原版氢气开放到塞普罗星球
         Liquids.hydrogen.shownPlanets.add(Planets.serpulo);
-
         // 查找塞普罗水泵节点作为父节点，找不到则挂根节点
         TechNode pumpNode = findNode(Planets.serpulo.techTree, Blocks.waterExtractor);
         TechNode parentNode = (pumpNode != null) ? pumpNode : Planets.serpulo.techTree;
-
+        // 氢气节点（挂在水泵下）
+        TechNode hydrogenNode = node(Liquids.hydrogen, () -> {});
+        hydrogenNode.parent = parentNode;
+        parentNode.children.add(hydrogenNode);
         // 塞普罗制氢机 -> 氧气（副产品）
         TechNode electrolyzerNode = node(SerpuloElectrolyzer.block, () -> {
             nodeProduce(Oxygen.liquid, () -> {});
         });
-        electrolyzerNode.parent = parentNode;
-        parentNode.children.add(electrolyzerNode);
-
+        electrolyzerNode.parent = hydrogenNode;
+        hydrogenNode.children.add(electrolyzerNode);
         // 氕气分离机 -> 氕气
         TechNode protiumNode = node(ProtiumSeparator.block, () -> {
             nodeProduce(Protium.liquid, () -> {});
         });
         protiumNode.parent = electrolyzerNode;
         electrolyzerNode.children.add(protiumNode);
-
         // 氘气分离机 -> 氘气
         TechNode deuteriumNode = node(DeuteriumSeparator.block, () -> {
             nodeProduce(Deuterium.liquid, () -> {});
         });
         deuteriumNode.parent = protiumNode;
         protiumNode.children.add(deuteriumNode);
-
         // 氚气分离机 -> 氚气
         TechNode tritiumNode = node(TritiumSeparator.block, () -> {
             nodeProduce(Tritium.liquid, () -> {});
         });
         tritiumNode.parent = deuteriumNode;
         deuteriumNode.children.add(tritiumNode);
-
         Log.info("Yuansu Serpulo tech tree loaded.");
     }
 }
