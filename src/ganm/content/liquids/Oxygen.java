@@ -1,6 +1,7 @@
 package ganm.content.liquids;
 
 import mindustry.type.Liquid;
+import mindustry.content.Planets;
 
 /**
  * 氧气
@@ -18,6 +19,8 @@ public class Oxygen {
             heatCapacity = 0.5f;
             temperature = 0.5f;
             viscosity = 0.3f;
+                   shownPlanets.add(Planets.erekir);
+            shownPlanets.add(Planets.serpulo);
         }};
     }
 }
