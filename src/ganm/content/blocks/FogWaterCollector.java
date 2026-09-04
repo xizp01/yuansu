@@ -18,27 +18,27 @@ import ganm.content.PlanetHumidity;
 public class FogWaterCollector {
     public static Block block;
     public static void load() {
-        block = new GenericCrafter("fog-water-collector") {{
-            requirements(Category.crafting, ItemStack.with(
-                Items.copper, 15,
-                Items.lead, 10,
-                Items.metaglass, 8
-            ));
-            size = 1;
-            health = 100;
-            craftTime = 80f;
-            hasPower = false; // 被动设备，零耗电
-            hasLiquids = true;
-            liquidCapacity = 8f;
-            outputLiquid = new LiquidStack(Liquids.water, 0.6f);
-            shownPlanets.add(Planets.erekir);
-            shownPlanets.add(Planets.serpulo);
-            craftEffect = Fx.vapor;
-            updateEffect = Fx.steam;
-            updateEffectChance = 0.02f;
-            updateEffectSpread = 2f;
-        }} {
-            // 雾水收集：湿度≥90才工作，<90完全停止
+        block = new GenericCrafter("fog-water-collector") {
+            {
+                requirements(Category.crafting, ItemStack.with(
+                    Items.copper, 15,
+                    Items.lead, 10,
+                    Items.metaglass, 8
+                ));
+                size = 1;
+                health = 100;
+                craftTime = 80f;
+                hasPower = false;
+                hasLiquids = true;
+                liquidCapacity = 8f;
+                outputLiquid = new LiquidStack(Liquids.water, 0.6f);
+                shownPlanets.add(Planets.erekir);
+                shownPlanets.add(Planets.serpulo);
+                craftEffect = Fx.vapor;
+                updateEffect = Fx.steam;
+                updateEffectChance = 0.02f;
+                updateEffectSpread = 2f;
+            }
             @Override
             public float getProgressIncrease(float baseEfficiency) {
                 float humidity = PlanetHumidity.getCurrentHumidity();

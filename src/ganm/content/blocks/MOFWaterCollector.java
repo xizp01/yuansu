@@ -19,40 +19,39 @@ import ganm.content.items.MOFMaterial;
 public class MOFWaterCollector {
     public static Block block;
     public static void load() {
-        block = new GenericCrafter("mof-water-collector") {{
-            requirements(Category.crafting, ItemStack.with(
-                Items.copper, 150,
-                Items.lead, 120,
-                Items.titanium, 90,
-                Items.silicon, 80,
-                Items.metaglass, 60,
-                Items.plastanium, 50,
-                Items.surgeAlloy, 30,
-                Items.phaseFabric, 20
-            ));
-            size = 4;
-            health = 500;
-            craftTime = 80f;
-            hasPower = true;
-            hasItems = true;
-            hasLiquids = true;
-            liquidCapacity = 50f;
-            outputLiquid = new LiquidStack(Liquids.water, 3f);
-            consumeItem(MOFMaterial.item, 1); // 消耗MOF材料（寿命长，消耗慢）
-            consumePower(0.8f); // 仅风机耗电，远低于前代
-            shownPlanets.add(Planets.erekir);
-            shownPlanets.add(Planets.serpulo);
-            craftEffect = Fx.vapor;
-            updateEffect = Fx.steam;
-            updateEffectChance = 0.15f;
-            updateEffectSpread = 10f;
-            warmupSpeed = 0.01f;
-        }} {
-            // 四代MOF：全湿度稳定，最低也有85%产量
+        block = new GenericCrafter("mof-water-collector") {
+            {
+                requirements(Category.crafting, ItemStack.with(
+                    Items.copper, 150,
+                    Items.lead, 120,
+                    Items.titanium, 90,
+                    Items.silicon, 80,
+                    Items.metaglass, 60,
+                    Items.plastanium, 50,
+                    Items.surgeAlloy, 30,
+                    Items.phaseFabric, 20
+                ));
+                size = 4;
+                health = 500;
+                craftTime = 80f;
+                hasPower = true;
+                hasItems = true;
+                hasLiquids = true;
+                liquidCapacity = 50f;
+                outputLiquid = new LiquidStack(Liquids.water, 3f);
+                consumeItem(MOFMaterial.item, 1);
+                consumePower(0.8f);
+                shownPlanets.add(Planets.erekir);
+                shownPlanets.add(Planets.serpulo);
+                craftEffect = Fx.vapor;
+                updateEffect = Fx.steam;
+                updateEffectChance = 0.15f;
+                updateEffectSpread = 10f;
+                warmupSpeed = 0.01f;
+            }
             @Override
             public float getProgressIncrease(float baseEfficiency) {
                 float humidity = PlanetHumidity.getCurrentHumidity();
-                // MOF在极低湿度下仍有不错表现，倍率0.85-1.1
                 float multiplier = 0.85f + (humidity / 100f) * 0.25f;
                 return super.getProgressIncrease(baseEfficiency) * multiplier;
             }
