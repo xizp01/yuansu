@@ -2,11 +2,9 @@ package ganm.content.liquids;
 import arc.graphics.Color;
 import mindustry.type.Liquid;
 import mindustry.content.Planets;
-import ganm.content.status.Radiation;
 /**
  * 氚气（超重氢）
  * 氢的放射性同位素，核聚变的关键燃料，半衰期约12.3年。
- * 具有放射性，接触单位会施加辐射状态。
  * 所属星球：埃里克尔、塞普罗
  */
 public class Tritium {
@@ -18,7 +16,6 @@ public class Tritium {
             viscosity = 0.14f;
             temperature = 0.25f;
             heatCapacity = 0.4f;
-            effect = Radiation.effect;
             barColor = Color.valueOf("3a4a90");
             shownPlanets.add(Planets.erekir);
             shownPlanets.add(Planets.serpulo);
