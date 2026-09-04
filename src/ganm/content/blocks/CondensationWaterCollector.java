@@ -10,9 +10,9 @@ import mindustry.content.Planets;
 import mindustry.content.Fx;
 import ganm.content.PlanetHumidity;
 /**
- * 冷凝式空气制水机
- * 通过制冷冷凝，从空气中提取水蒸气凝结成水。
- * 耗电量较高，产量受星球湿度影响，潮湿星球效率高。
+ * 一代：空气冷凝取水器
+ * 压缩制冷路线，模仿除湿机/空调原理，蒸发器表面降温使水汽凝结。
+ * 耗电量高，干燥星球效率暴跌，适合潮湿星球。
  * 所属星球：埃里克尔、塞普罗
  */
 public class CondensationWaterCollector {
@@ -42,15 +42,19 @@ public class CondensationWaterCollector {
             updateEffectSpread = 5f;
             warmupSpeed = 0.02f;
         }} {
-            // 自定义Build类：根据星球湿度调整产量
-            @Override
-            public void update() {
-                super.update();
-            }
+            // 一代冷凝式：湿度≥50满速，35-50半速，<35只有20%
             @Override
             public float getProgressIncrease(float baseEfficiency) {
-                // 进度增加量 = 基础进度 × 湿度倍率
-                return super.getProgressIncrease(baseEfficiency) * PlanetHumidity.getProductionMultiplier();
+                float humidity = PlanetHumidity.getCurrentHumidity();
+                float multiplier;
+                if (humidity >= 50f) {
+                    multiplier = 1.0f;
+                } else if (humidity >= 35f) {
+                    multiplier = 0.5f;
+                } else {
+                    multiplier = 0.2f;
+                }
+                return super.getProgressIncrease(baseEfficiency) * multiplier;
             }
         };
     }
