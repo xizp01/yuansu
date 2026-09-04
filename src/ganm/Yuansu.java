@@ -6,7 +6,6 @@ import arc.graphics.g2d.*;
 import arc.math.*;
 import mindustry.mod.*;
 import mindustry.gen.Groups;
-import mindustry.type.LiquidStack;
 import mindustry.game.EventType.Trigger;
 import ganm.content.status.Radiation;
 import ganm.content.liquids.Protium;
@@ -64,20 +63,15 @@ public class Yuansu extends Mod {
                 scanTimer = 0;
                 Groups.build.each(building -> {
                     if (building.liquids != null && building.block != null && building.block.hasLiquids) {
-                        // 遍历建筑中的所有液体，检测氚气
-                        boolean hasTritium = false;
-                        for (LiquidStack stack : building.liquids) {
-                            if (stack.liquid == Tritium.liquid && stack.amount > 0.01f) {
-                                hasTritium = true;
-                                break;
-                            }
-                        }
+                        // 两种方式检测氚气：get() 和 current()
+                        float amount = building.liquids.get(Tritium.liquid);
+                        boolean hasTritium = amount > 0.01f || building.liquids.current() == Tritium.liquid;
                         // 有氚气就生成粒子，存储量越大粒子越多
                         if (hasTritium && tritiumParticles.size < MAX_PARTICLES) {
-                            int count = 1 + (int)(building.liquids.get(Tritium.liquid) / 5f);
+                            int count = 1 + (int)(amount / 5f);
                             for (int i = 0; i < Math.min(count, 3); i++) {
                                 float angle = Mathf.random(360f);
-                                float dist = building.block.size * 4f + Mathf.random(8f);
+                                float dist = building.block.size * 4f + Mathf.random(10f);
                                 float px = building.x + Mathf.cosDeg(angle) * dist;
                                 float py = building.y + Mathf.sinDeg(angle) * dist;
                                 tritiumParticles.add(new TritiumParticle(px, py));
