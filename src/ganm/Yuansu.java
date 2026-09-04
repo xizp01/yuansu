@@ -57,12 +57,12 @@ public class Yuansu extends Mod {
         SerpuloTechTree.load();
         // 氚气粒子更新 + 扫描存储氚气的建筑
         Events.run(Trigger.update, () -> {
-            // 每隔15帧扫描一次所有存储氚气的建筑
+            // 每隔10帧扫描一次所有存储氚气的建筑
             scanTimer++;
-            if (scanTimer >= 15) {
+            if (scanTimer >= 10) {
                 scanTimer = 0;
                 Groups.build.each(building -> {
-                    if (building.liquids != null && building.block != null && building.block.hasLiquids) {
+                    if (building.liquids != null) {
                         // 两种方式检测氚气：get() 和 current()
                         float amount = building.liquids.get(Tritium.liquid);
                         boolean hasTritium = amount > 0.01f || building.liquids.current() == Tritium.liquid;
@@ -71,7 +71,7 @@ public class Yuansu extends Mod {
                             int count = 1 + (int)(amount / 5f);
                             for (int i = 0; i < Math.min(count, 3); i++) {
                                 float angle = Mathf.random(360f);
-                                float dist = building.block.size * 4f + Mathf.random(10f);
+                                float dist = 4f + Mathf.random(10f);
                                 float px = building.x + Mathf.cosDeg(angle) * dist;
                                 float py = building.y + Mathf.sinDeg(angle) * dist;
                                 tritiumParticles.add(new TritiumParticle(px, py));
