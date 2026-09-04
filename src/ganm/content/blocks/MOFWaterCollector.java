@@ -18,35 +18,36 @@ import ganm.content.items.MOFMaterial;
 public class MOFWaterCollector {
     public static Block block;
     public static void load() {
-        block = new HumidityCrafterBlock("mof-water-collector") {{
-            requirements(Category.crafting, ItemStack.with(
-                Items.copper, 150,
-                Items.lead, 120,
-                Items.titanium, 90,
-                Items.silicon, 80,
-                Items.metaglass, 60,
-                Items.plastanium, 50,
-                Items.surgeAlloy, 30,
-                Items.phaseFabric, 20
-            ));
-            size = 4;
-            health = 500;
-            craftTime = 80f;
-            hasPower = true;
-            hasItems = true;
-            hasLiquids = true;
-            liquidCapacity = 50f;
-            outputLiquid = new LiquidStack(Liquids.water, 3f);
-            consumeItem(MOFMaterial.item, 1);
-            consumePower(0.8f);
-            shownPlanets.add(Planets.erekir);
-            shownPlanets.add(Planets.serpulo);
-            craftEffect = Fx.vapor;
-            updateEffect = Fx.steam;
-            updateEffectChance = 0.15f;
-            updateEffectSpread = 10f;
-            warmupSpeed = 0.01f;
-        }} {
+        block = new HumidityCrafterBlock("mof-water-collector") {
+            {
+                requirements(Category.crafting, ItemStack.with(
+                    Items.copper, 150,
+                    Items.lead, 120,
+                    Items.titanium, 90,
+                    Items.silicon, 80,
+                    Items.metaglass, 60,
+                    Items.plastanium, 50,
+                    Items.surgeAlloy, 30,
+                    Items.phaseFabric, 20
+                ));
+                size = 4;
+                health = 500;
+                craftTime = 80f;
+                hasPower = true;
+                hasItems = true;
+                hasLiquids = true;
+                liquidCapacity = 50f;
+                outputLiquid = new LiquidStack(Liquids.water, 3f);
+                consumeItem(MOFMaterial.item, 1);
+                consumePower(0.8f);
+                shownPlanets.add(Planets.erekir);
+                shownPlanets.add(Planets.serpulo);
+                craftEffect = Fx.vapor;
+                updateEffect = Fx.steam;
+                updateEffectChance = 0.15f;
+                updateEffectSpread = 10f;
+                warmupSpeed = 0.01f;
+            }
             @Override
             public float getHumidityMultiplier() {
                 float humidity = PlanetHumidity.getCurrentHumidity();

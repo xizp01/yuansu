@@ -17,26 +17,27 @@ import ganm.content.PlanetHumidity;
 public class FogWaterCollector {
     public static Block block;
     public static void load() {
-        block = new HumidityCrafterBlock("fog-water-collector") {{
-            requirements(Category.crafting, ItemStack.with(
-                Items.copper, 15,
-                Items.lead, 10,
-                Items.metaglass, 8
-            ));
-            size = 1;
-            health = 100;
-            craftTime = 80f;
-            hasPower = false;
-            hasLiquids = true;
-            liquidCapacity = 8f;
-            outputLiquid = new LiquidStack(Liquids.water, 0.6f);
-            shownPlanets.add(Planets.erekir);
-            shownPlanets.add(Planets.serpulo);
-            craftEffect = Fx.vapor;
-            updateEffect = Fx.steam;
-            updateEffectChance = 0.02f;
-            updateEffectSpread = 2f;
-        }} {
+        block = new HumidityCrafterBlock("fog-water-collector") {
+            {
+                requirements(Category.crafting, ItemStack.with(
+                    Items.copper, 15,
+                    Items.lead, 10,
+                    Items.metaglass, 8
+                ));
+                size = 1;
+                health = 100;
+                craftTime = 80f;
+                hasPower = false;
+                hasLiquids = true;
+                liquidCapacity = 8f;
+                outputLiquid = new LiquidStack(Liquids.water, 0.6f);
+                shownPlanets.add(Planets.erekir);
+                shownPlanets.add(Planets.serpulo);
+                craftEffect = Fx.vapor;
+                updateEffect = Fx.steam;
+                updateEffectChance = 0.02f;
+                updateEffectSpread = 2f;
+            }
             @Override
             public float getHumidityMultiplier() {
                 float humidity = PlanetHumidity.getCurrentHumidity();

@@ -17,30 +17,31 @@ import ganm.content.PlanetHumidity;
 public class CondensationWaterCollector {
     public static Block block;
     public static void load() {
-        block = new HumidityCrafterBlock("condensation-water-collector") {{
-            requirements(Category.crafting, ItemStack.with(
-                Items.copper, 50,
-                Items.lead, 40,
-                Items.titanium, 20,
-                Items.silicon, 25,
-                Items.metaglass, 15
-            ));
-            size = 2;
-            health = 220;
-            craftTime = 80f;
-            hasPower = true;
-            hasLiquids = true;
-            liquidCapacity = 20f;
-            outputLiquid = new LiquidStack(Liquids.water, 2f);
-            consumePower(3.0f);
-            shownPlanets.add(Planets.erekir);
-            shownPlanets.add(Planets.serpulo);
-            craftEffect = Fx.vapor;
-            updateEffect = Fx.steam;
-            updateEffectChance = 0.08f;
-            updateEffectSpread = 5f;
-            warmupSpeed = 0.02f;
-        }} {
+        block = new HumidityCrafterBlock("condensation-water-collector") {
+            {
+                requirements(Category.crafting, ItemStack.with(
+                    Items.copper, 50,
+                    Items.lead, 40,
+                    Items.titanium, 20,
+                    Items.silicon, 25,
+                    Items.metaglass, 15
+                ));
+                size = 2;
+                health = 220;
+                craftTime = 80f;
+                hasPower = true;
+                hasLiquids = true;
+                liquidCapacity = 20f;
+                outputLiquid = new LiquidStack(Liquids.water, 2f);
+                consumePower(3.0f);
+                shownPlanets.add(Planets.erekir);
+                shownPlanets.add(Planets.serpulo);
+                craftEffect = Fx.vapor;
+                updateEffect = Fx.steam;
+                updateEffectChance = 0.08f;
+                updateEffectSpread = 5f;
+                warmupSpeed = 0.02f;
+            }
             @Override
             public float getHumidityMultiplier() {
                 float humidity = PlanetHumidity.getCurrentHumidity();

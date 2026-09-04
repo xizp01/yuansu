@@ -18,33 +18,34 @@ import ganm.content.items.SilicaGel;
 public class DesiccantWheelCollector {
     public static Block block;
     public static void load() {
-        block = new HumidityCrafterBlock("desiccant-wheel-collector") {{
-            requirements(Category.crafting, ItemStack.with(
-                Items.copper, 80,
-                Items.lead, 60,
-                Items.titanium, 40,
-                Items.silicon, 45,
-                Items.metaglass, 30,
-                Items.plastanium, 20
-            ));
-            size = 3;
-            health = 320;
-            craftTime = 80f;
-            hasPower = true;
-            hasItems = true;
-            hasLiquids = true;
-            liquidCapacity = 30f;
-            outputLiquid = new LiquidStack(Liquids.water, 2.2f);
-            consumeItem(SilicaGel.item, 1);
-            consumePower(2.0f);
-            shownPlanets.add(Planets.erekir);
-            shownPlanets.add(Planets.serpulo);
-            craftEffect = Fx.vapor;
-            updateEffect = Fx.steam;
-            updateEffectChance = 0.1f;
-            updateEffectSpread = 8f;
-            warmupSpeed = 0.015f;
-        }} {
+        block = new HumidityCrafterBlock("desiccant-wheel-collector") {
+            {
+                requirements(Category.crafting, ItemStack.with(
+                    Items.copper, 80,
+                    Items.lead, 60,
+                    Items.titanium, 40,
+                    Items.silicon, 45,
+                    Items.metaglass, 30,
+                    Items.plastanium, 20
+                ));
+                size = 3;
+                health = 320;
+                craftTime = 80f;
+                hasPower = true;
+                hasItems = true;
+                hasLiquids = true;
+                liquidCapacity = 30f;
+                outputLiquid = new LiquidStack(Liquids.water, 2.2f);
+                consumeItem(SilicaGel.item, 1);
+                consumePower(2.0f);
+                shownPlanets.add(Planets.erekir);
+                shownPlanets.add(Planets.serpulo);
+                craftEffect = Fx.vapor;
+                updateEffect = Fx.steam;
+                updateEffectChance = 0.1f;
+                updateEffectSpread = 8f;
+                warmupSpeed = 0.015f;
+            }
             @Override
             public float getHumidityMultiplier() {
                 float humidity = PlanetHumidity.getCurrentHumidity();
