@@ -33,7 +33,7 @@ public class SilicaGelSynthesizer {
             consumePower(1.5f);
             shownPlanets.add(Planets.erekir);
             shownPlanets.add(Planets.serpulo);
-            craftEffect = Fx.formpress;
+            craftEffect = Fx.vapor;
             updateEffect = Fx.steam;
             updateEffectChance = 0.05f;
             warmupSpeed = 0.02f;
