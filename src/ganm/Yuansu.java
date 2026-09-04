@@ -29,6 +29,8 @@ public class Yuansu extends Mod {
     public static Seq<TritiumParticle> tritiumParticles = new Seq<>();
     // 粒子数量上限，防止卡顿
     public static final int MAX_PARTICLES = 200;
+    // 扫描计数器
+    private static int scanTimer = 0;
     public Yuansu() {
         Log.info("Loaded Yuansu constructor.");
     }
@@ -55,16 +57,17 @@ public class Yuansu extends Mod {
         SerpuloTechTree.load();
         // 氚气粒子更新 + 扫描存储氚气的建筑
         Events.run(Trigger.update, () -> {
-            // 每隔30帧（0.5秒）扫描一次所有存储氚气的建筑
-            if (Time.time % 30 == 0) {
+            // 每隔20帧扫描一次所有存储氚气的建筑
+            scanTimer++;
+            if (scanTimer >= 20) {
+                scanTimer = 0;
                 Groups.build.each(building -> {
-                    if (building.block != null && building.block.hasLiquids && building.liquids != null) {
-                        if (building.liquids.get(Tritium.liquid) > 0.5f) {
-                            if (tritiumParticles.size < MAX_PARTICLES) {
-                                float px = building.x + Mathf.range(building.block.size * 3f);
-                                float py = building.y + Mathf.range(building.block.size * 3f);
-                                tritiumParticles.add(new TritiumParticle(px, py));
-                            }
+                    if (building.liquids != null) {
+                        float amount = building.liquids.get(Tritium.liquid);
+                        if (amount > 0.01f && tritiumParticles.size < MAX_PARTICLES) {
+                            float px = building.x + Mathf.range(building.block.size * 3f);
+                            float py = building.y + Mathf.range(building.block.size * 3f);
+                            tritiumParticles.add(new TritiumParticle(px, py));
                         }
                     }
                 });
