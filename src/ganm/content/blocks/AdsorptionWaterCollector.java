@@ -34,7 +34,7 @@ public class AdsorptionWaterCollector {
             hasLiquids = true;
             liquidCapacity = 25f;
             outputLiquid = new LiquidStack(Liquids.water, 3f);
-            consumeItem(Items.sand, 5f); // 硅/沙子作为干燥剂原料
+            consumeItem(Items.sand, 5); // 硅/沙子作为干燥剂原料
             consumePower(1.5f);
             shownPlanets.add(Planets.erekir);
             shownPlanets.add(Planets.serpulo);
