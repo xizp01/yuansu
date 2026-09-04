@@ -8,10 +8,11 @@ import mindustry.content.Items;
 import mindustry.content.Liquids;
 import mindustry.content.Planets;
 import mindustry.content.Fx;
+import ganm.content.PlanetHumidity;
 /**
  * 吸附式空气集水器
  * 使用硅胶/氯化锂等干燥剂吸附空气中的水蒸气，再加热解吸冷凝成水。
- * 适合干旱星球，需要消耗硅作为干燥剂，能耗较低。
+ * 消耗硅作为干燥剂，能耗较低，受湿度影响较小，干旱星球也能稳定工作。
  * 所属星球：埃里克尔、塞普罗
  */
 public class AdsorptionWaterCollector {
@@ -43,6 +44,15 @@ public class AdsorptionWaterCollector {
             updateEffectChance = 0.06f;
             updateEffectSpread = 5f;
             warmupSpeed = 0.015f;
-        }};
+        }} {
+            // 自定义Build类：吸附式受湿度影响较小（干燥剂在低湿度下也能工作）
+            @Override
+            public float getProgressIncrease(float baseEfficiency) {
+                float humidity = PlanetHumidity.getCurrentHumidity();
+                // 吸附式湿度倍率：湿度0 -> 0.7，湿度100 -> 1.3（比冷凝式平缓）
+                float multiplier = 0.7f + (humidity / 100f) * 0.6f;
+                return super.getProgressIncrease(baseEfficiency) * multiplier;
+            }
+        };
     }
 }
