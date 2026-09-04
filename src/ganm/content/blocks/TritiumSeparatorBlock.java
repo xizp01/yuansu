@@ -14,7 +14,7 @@ import ganm.content.entities.TritiumParticle;
  * 运行时释放氚气放射性粒子，粒子飘散过程中碰到单位会施加辐射状态。
  */
 public class TritiumSeparatorBlock extends GenericCrafter {
-    public float particleSpawnChance = 0.4f;
+    public float particleSpawnChance = 0.9f;
     public TritiumSeparatorBlock(String name) {
         super(name);
         requirements(Category.crafting, ItemStack.with(
@@ -49,10 +49,15 @@ public class TritiumSeparatorBlock extends GenericCrafter {
             // 机器运行时释放氚气放射性粒子
             if (efficiency > 0 && Yuansu.tritiumParticles.size < Yuansu.MAX_PARTICLES) {
                 if (Mathf.random() < particleSpawnChance) {
-                    // 在机器周围随机位置生成粒子
-                    float px = x + Mathf.range(size * 3.5f);
-                    float py = y + Mathf.range(size * 3.5f);
-                    Yuansu.tritiumParticles.add(new TritiumParticle(px, py));
+                    // 每次生成1-2个粒子，在机器周围较大范围生成
+                    int count = 1 + (int)(Mathf.random() * 2);
+                    for (int i = 0; i < count; i++) {
+                        float angle = Mathf.random(360f);
+                        float dist = size * 3f + Mathf.random(15f);
+                        float px = x + Mathf.cosDeg(angle) * dist;
+                        float py = y + Mathf.sinDeg(angle) * dist;
+                        Yuansu.tritiumParticles.add(new TritiumParticle(px, py));
+                    }
                 }
             }
         }
