@@ -5,6 +5,7 @@ import arc.struct.Seq;
 import arc.graphics.g2d.*;
 import arc.math.*;
 import mindustry.mod.*;
+import mindustry.gen.Groups;
 import mindustry.game.EventType.Trigger;
 import ganm.content.status.Radiation;
 import ganm.content.liquids.Protium;
@@ -52,8 +53,23 @@ public class Yuansu extends Mod {
         // 科技树（双星球）
         ErekirTechTree.load();
         SerpuloTechTree.load();
-        // 氚气粒子更新
+        // 氚气粒子更新 + 扫描存储氚气的建筑
         Events.run(Trigger.update, () -> {
+            // 每隔30帧（0.5秒）扫描一次所有存储氚气的建筑
+            if (Time.time % 30 == 0) {
+                Groups.build.each(building -> {
+                    if (building.block != null && building.block.hasLiquids && building.liquids != null) {
+                        if (building.liquids.get(Tritium.liquid) > 0.5f) {
+                            if (tritiumParticles.size < MAX_PARTICLES) {
+                                float px = building.x + Mathf.range(building.block.size * 3f);
+                                float py = building.y + Mathf.range(building.block.size * 3f);
+                                tritiumParticles.add(new TritiumParticle(px, py));
+                            }
+                        }
+                    }
+                });
+            }
+            // 更新粒子
             for (int i = tritiumParticles.size - 1; i >= 0; i--) {
                 TritiumParticle p = tritiumParticles.get(i);
                 p.update();
