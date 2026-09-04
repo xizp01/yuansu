@@ -9,12 +9,15 @@ import mindustry.content.*;
 import ganm.Yuansu;
 import ganm.content.liquids.Tritium;
 import ganm.content.entities.TritiumParticle;
+import ganm.content.entities.TritiumGasCloud;
 /**
  * 氚气分离机（自定义方块类）
- * 运行时释放氚气放射性粒子，粒子飘散过程中碰到单位会施加辐射状态。
+ * 运行时释放氚气气体云，气体云持续给范围内单位施加辐射状态。
+ * 完全按照DeepSeek方案实现。
  */
 public class TritiumSeparatorBlock extends GenericCrafter {
-    public float particleSpawnChance = 0.9f;
+    public float cloudSpawnChance = 0.08f; // 每帧8%概率生成气体云
+    public float particleSpawnChance = 0.5f;
     public TritiumSeparatorBlock(String name) {
         super(name);
         requirements(Category.crafting, ItemStack.with(
@@ -46,18 +49,22 @@ public class TritiumSeparatorBlock extends GenericCrafter {
         @Override
         public void update() {
             super.update();
-            // 机器运行时释放氚气放射性粒子
-            if (efficiency > 0 && Yuansu.tritiumParticles.size < Yuansu.MAX_PARTICLES) {
-                if (Mathf.random() < particleSpawnChance) {
-                    // 每次生成1-2个粒子，在机器周围较大范围生成
-                    int count = 1 + (int)(Mathf.random() * 2);
-                    for (int i = 0; i < count; i++) {
-                        float angle = Mathf.random(360f);
-                        float dist = size * 3f + Mathf.random(15f);
-                        float px = x + Mathf.cosDeg(angle) * dist;
-                        float py = y + Mathf.sinDeg(angle) * dist;
-                        Yuansu.tritiumParticles.add(new TritiumParticle(px, py));
-                    }
+            if (efficiency > 0) {
+                // 生成气体云（DeepSeek核心：气体云自己施加辐射）
+                if (Yuansu.tritiumGasClouds.size < Yuansu.MAX_CLOUDS && Mathf.random() < cloudSpawnChance) {
+                    float angle = Mathf.random(360f);
+                    float dist = size * 2f + Mathf.random(10f);
+                    float cx = x + Mathf.cosDeg(angle) * dist;
+                    float cy = y + Mathf.sinDeg(angle) * dist;
+                    Yuansu.tritiumGasClouds.add(new TritiumGasCloud(cx, cy));
+                }
+                // 生成粒子（仅视觉效果）
+                if (Yuansu.tritiumParticles.size < Yuansu.MAX_PARTICLES && Mathf.random() < particleSpawnChance) {
+                    float angle = Mathf.random(360f);
+                    float dist = size * 3f + Mathf.random(15f);
+                    float px = x + Mathf.cosDeg(angle) * dist;
+                    float py = y + Mathf.sinDeg(angle) * dist;
+                    Yuansu.tritiumParticles.add(new TritiumParticle(px, py));
                 }
             }
         }

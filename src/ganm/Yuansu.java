@@ -16,6 +16,7 @@ import ganm.content.blocks.DeuteriumSeparator;
 import ganm.content.blocks.TritiumSeparator;
 import ganm.content.blocks.SerpuloElectrolyzer;
 import ganm.content.entities.TritiumParticle;
+import ganm.content.entities.TritiumGasCloud;
 import ganm.tech.ErekirTechTree;
 import ganm.tech.SerpuloTechTree;
 /**
@@ -24,10 +25,12 @@ import ganm.tech.SerpuloTechTree;
  * 适配星球：埃里克尔、塞普罗
  */
 public class Yuansu extends Mod {
-    // 氚气放射性粒子列表
+    // 氚气气体云列表（DeepSeek方案：气体云自己施加辐射）
+    public static Seq<TritiumGasCloud> tritiumGasClouds = new Seq<>();
+    // 氚气放射性粒子列表（仅作视觉效果）
     public static Seq<TritiumParticle> tritiumParticles = new Seq<>();
-    // 粒子数量上限，防止卡顿
-    public static final int MAX_PARTICLES = 400;
+    public static final int MAX_PARTICLES = 200;
+    public static final int MAX_CLOUDS = 50;
     public Yuansu() {
         Log.info("Loaded Yuansu constructor.");
     }
@@ -52,8 +55,17 @@ public class Yuansu extends Mod {
         // 科技树（双星球）
         ErekirTechTree.load();
         SerpuloTechTree.load();
-        // 氚气粒子更新
+        // 更新气体云和粒子
         Events.run(Trigger.update, () -> {
+            // 更新气体云（施加辐射的核心逻辑）
+            for (int i = tritiumGasClouds.size - 1; i >= 0; i--) {
+                TritiumGasCloud cloud = tritiumGasClouds.get(i);
+                cloud.update();
+                if (cloud.isDead()) {
+                    tritiumGasClouds.remove(i);
+                }
+            }
+            // 更新粒子（仅视觉）
             for (int i = tritiumParticles.size - 1; i >= 0; i--) {
                 TritiumParticle p = tritiumParticles.get(i);
                 p.update();
@@ -62,16 +74,19 @@ public class Yuansu extends Mod {
                 }
             }
         });
-        // 氚气粒子绘制
+        // 绘制气体云和粒子
         Events.run(Trigger.draw, () -> {
+            // 绘制气体云（半透明绿色区域）
+            for (TritiumGasCloud cloud : tritiumGasClouds) {
+                float alpha = cloud.concentration * 0.15f;
+                Draw.color(57f / 255f, 1f, 20f / 255f, alpha);
+                Fill.circle(cloud.x, cloud.y, cloud.radius);
+            }
+            // 绘制粒子（视觉效果）
             for (TritiumParticle p : tritiumParticles) {
                 float alpha = Mathf.clamp(p.life / p.maxLife);
-                // 外层光晕
-                Draw.color(57f / 255f, 1f, 20f / 255f, alpha * 0.3f);
-                Fill.circle(p.x, p.y, p.radius + 4f);
-                // 核心
-                Draw.color(150f / 255f, 1f, 100f / 255f, alpha * 0.85f);
-                Fill.circle(p.x, p.y, p.radius * 0.7f);
+                Draw.color(150f / 255f, 1f, 100f / 255f, alpha * 0.7f);
+                Fill.circle(p.x, p.y, p.radius * 0.6f);
             }
             Draw.reset();
         });
