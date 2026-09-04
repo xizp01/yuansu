@@ -29,8 +29,6 @@ public class Yuansu extends Mod {
     public static Seq<TritiumParticle> tritiumParticles = new Seq<>();
     // 粒子数量上限，防止卡顿
     public static final int MAX_PARTICLES = 300;
-    // 扫描计数器
-    private static int scanTimer = 0;
     public Yuansu() {
         Log.info("Loaded Yuansu constructor.");
     }
@@ -57,19 +55,15 @@ public class Yuansu extends Mod {
         SerpuloTechTree.load();
         // 氚气粒子更新 + 扫描存储氚气的建筑
         Events.run(Trigger.update, () -> {
-            // 每隔10帧扫描一次所有存储氚气的建筑
-            scanTimer++;
-            if (scanTimer >= 10) {
-                scanTimer = 0;
-                Groups.build.each(building -> {
+            // 每帧扫描所有建筑，检测氚气
+            Groups.build.each(building -> {
+                try {
                     if (building.liquids != null) {
-                        // 两种方式检测氚气：get() 和 current()
                         float amount = building.liquids.get(Tritium.liquid);
-                        boolean hasTritium = amount > 0.01f || building.liquids.current() == Tritium.liquid;
-                        // 有氚气就生成粒子，存储量越大粒子越多
+                        boolean hasTritium = amount > 0 || building.liquids.current() == Tritium.liquid;
                         if (hasTritium && tritiumParticles.size < MAX_PARTICLES) {
-                            int count = 1 + (int)(amount / 5f);
-                            for (int i = 0; i < Math.min(count, 3); i++) {
+                            // 每5帧生成一个粒子
+                            if ((int)Time.time % 5 == 0) {
                                 float angle = Mathf.random(360f);
                                 float dist = 4f + Mathf.random(10f);
                                 float px = building.x + Mathf.cosDeg(angle) * dist;
@@ -78,8 +72,10 @@ public class Yuansu extends Mod {
                             }
                         }
                     }
-                });
-            }
+                } catch (Exception e) {
+                    // 忽略异常
+                }
+            });
             // 更新粒子
             for (int i = tritiumParticles.size - 1; i >= 0; i--) {
                 TritiumParticle p = tritiumParticles.get(i);
