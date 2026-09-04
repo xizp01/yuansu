@@ -14,9 +14,13 @@ import ganm.content.blocks.ProtiumSeparator;
 import ganm.content.blocks.DeuteriumSeparator;
 import ganm.content.blocks.TritiumSeparator;
 import ganm.content.blocks.SerpuloElectrolyzer;
+import ganm.content.blocks.CondensationWaterCollector;
+import ganm.content.blocks.AdsorptionWaterCollector;
+import ganm.content.blocks.FogWaterCollector;
 /**
  * 塞普罗星球科技树注册
  * 结构：水泵 -> 氢气 -> 制氢机 -> 氕气分离机 -> 氘气分离机 -> 氚气分离机
+ *       雾水收集网 -> 冷凝式空气制水机 -> 吸附式空气集水器
  */
 public class SerpuloTechTree {
     private static TechNode findNode(TechNode node, UnlockableContent content) {
@@ -61,6 +65,20 @@ public class SerpuloTechTree {
         });
         tritiumNode.parent = deuteriumNode;
         deuteriumNode.children.add(tritiumNode);
+        // ===== 空气取水设备分支（挂根节点）=====
+        TechNode root = Planets.serpulo.techTree;
+        // 雾水收集网（基础被动）
+        TechNode fogNode = node(FogWaterCollector.block, () -> {});
+        fogNode.parent = root;
+        root.children.add(fogNode);
+        // 冷凝式空气制水机（中级）
+        TechNode condensationNode = node(CondensationWaterCollector.block, () -> {});
+        condensationNode.parent = fogNode;
+        fogNode.children.add(condensationNode);
+        // 吸附式空气集水器（高级）
+        TechNode adsorptionNode = node(AdsorptionWaterCollector.block, () -> {});
+        adsorptionNode.parent = condensationNode;
+        condensationNode.children.add(adsorptionNode);
         Log.info("Yuansu Serpulo tech tree loaded.");
     }
 }
