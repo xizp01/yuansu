@@ -15,8 +15,10 @@ import ganm.content.blocks.ProtiumSeparator;
 import ganm.content.blocks.DeuteriumSeparator;
 import ganm.content.blocks.TritiumSeparator;
 import ganm.content.blocks.SerpuloElectrolyzer;
+import ganm.content.blocks.SteamDetectorBlock;
 import ganm.tech.ErekirTechTree;
 import ganm.tech.SerpuloTechTree;
+import mindustry.Vars;
 /**
  * 元素模组主类
  * 内容：氕气、氘气、氚气及对应分离机，塞普罗制氢机
@@ -42,6 +44,8 @@ public class Yuansu extends Mod {
         DeuteriumSeparator.load();
         TritiumSeparator.load();
         SerpuloElectrolyzer.load();
+        // 全局检测方块
+        SteamDetectorBlock detector = new SteamDetectorBlock("steam-detector");
         Log.info("Yuansu mod content loaded.");
     }
     @Override
@@ -49,5 +53,19 @@ public class Yuansu extends Mod {
         // 科技树（双星球）
         ErekirTechTree.load();
         SerpuloTechTree.load();
+        // 延迟自动放置蒸汽检测器到地图中心
+        Vars.app.post(() -> {
+            try {
+                int cx = Vars.world.width() / 2;
+                int cy = Vars.world.height() / 2;
+                var tile = Vars.world.tile(cx, cy);
+                if (tile != null) {
+                    tile.setBlock(Vars.content.block("steam-detector"));
+                    Log.info("Steam detector placed at " + cx + ", " + cy);
+                }
+            } catch (Exception e) {
+                Log.err("Failed to place steam detector: " + e.getMessage());
+            }
+        });
     }
 }
