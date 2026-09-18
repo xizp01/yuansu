@@ -15,5 +15,6 @@ public class SteamConduit extends Conduit {
             Items.metaglass, 1
         ));
         botColor = Color.valueOf("8b4513"); // 棕红色，体现高温蒸汽
+        leaks = false; // 像电镀导管一样不泄漏
     }
 }
