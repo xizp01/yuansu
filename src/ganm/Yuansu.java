@@ -53,5 +53,36 @@ public class Yuansu extends Mod {
         // 科技树（双星球）
         ErekirTechTree.load();
         SerpuloTechTree.load();
+        // 全局蒸汽烫伤检测：每帧触发，每10帧实际检测一次
+        Events.on(EventType.Trigger.update, () -> {
+            tickCounter++;
+            if (tickCounter % 10 != 0) return;
+            // 全局扫描所有单位
+            for (Unit unit : Groups.unit) {
+                if (!unit.isValid()) continue;
+                // 检查单位周围3格内有没有存储水蒸气的建筑
+                boolean nearSteam = false;
+                int ux = (int)(unit.x / 8);
+                int uy = (int)(unit.y / 8);
+                for (int x = ux - 3; x <= ux + 3; x++) {
+                    for (int y = uy - 3; y <= uy + 3; y++) {
+                        var tile = Vars.world.tile(x, y);
+                        if (tile == null) continue;
+                        var build = tile.build;
+                        if (build == null || build.liquids == null) continue;
+                        if (build.liquids.currentAmount() <= 0) continue;
+                        if (build.liquids.current() == Steam.liquid) {
+                            nearSteam = true;
+                            break;
+                        }
+                    }
+                    if (nearSteam) break;
+                }
+                if (nearSteam) {
+                    unit.apply(Scalding.effect, 60f); // 持续1秒
+                }
+            }
+        });
+        Log.info("Steam scald detection initialized.");
     }
 }
