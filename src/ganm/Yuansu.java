@@ -16,6 +16,7 @@ import ganm.content.blocks.ProtiumSeparator;
 import ganm.content.blocks.DeuteriumSeparator;
 import ganm.content.blocks.TritiumSeparator;
 import ganm.content.blocks.SerpuloElectrolyzer;
+import ganm.content.blocks.SteamConduit;
 import ganm.tech.ErekirTechTree;
 import ganm.tech.SerpuloTechTree;
 import mindustry.Vars;
@@ -44,6 +45,8 @@ public class Yuansu extends Mod {
         DeuteriumSeparator.load();
         TritiumSeparator.load();
         SerpuloElectrolyzer.load();
+        // 蒸汽管道（安全运输，不造成烫伤）
+        new SteamConduit("steam-conduit");
         Log.info("Yuansu mod content loaded.");
     }
     @Override
@@ -60,6 +63,8 @@ public class Yuansu extends Mod {
                 if (build == null || build.liquids == null) continue;
                 if (build.liquids.currentAmount() <= 0) continue;
                 if (build.liquids.current() != Steam.liquid) continue;
+                // 蒸汽管道不造成烫伤，跳过
+                if (build.block == Vars.content.block("steam-conduit")) continue;
                 // 这个建筑存有水蒸气，扫描周围单位
                 float buildX = build.x;
                 float buildY = build.y;
