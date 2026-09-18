@@ -1,7 +1,7 @@
 package ganm;
 import arc.util.*;
+import arc.Events;
 import mindustry.mod.*;
-import mindustry.game.Events;
 import mindustry.game.EventType;
 import mindustry.gen.Building;
 import mindustry.gen.Groups;
