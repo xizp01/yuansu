@@ -64,7 +64,7 @@ public class Yuansu extends Mod {
                 if (build.liquids.currentAmount() <= 0) continue;
                 if (build.liquids.current() != Steam.liquid) continue;
                 // 蒸汽管道不造成烫伤，跳过
-                if (build.block == Vars.content.block("steam-conduit")) continue;
+                if (build.block.name.contentEquals("yuansu-steam-conduit")) continue;
                 // 这个建筑存有水蒸气，扫描周围单位
                 float buildX = build.x;
                 float buildY = build.y;
