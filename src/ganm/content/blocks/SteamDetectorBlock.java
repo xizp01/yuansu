@@ -1,8 +1,7 @@
 package ganm.content.blocks;
 import mindustry.Vars;
 import mindustry.type.Category;
-import mindustry.world.Block;
-import mindustry.world.blocks.BlockPart;
+import mindustry.world.blocks.production.GenericCrafter;
 import mindustry.gen.Groups;
 import mindustry.gen.Unit;
 import ganm.content.liquids.Steam;
@@ -12,20 +11,20 @@ import ganm.content.status.Scalding;
  * 不可见、无碰撞、不可建造的隐形方块，游戏启动时自动放置在地图中心。
  * 每10帧全局扫描所有单位，附近有水蒸气的施加烫伤。
  */
-public class SteamDetectorBlock extends Block {
+public class SteamDetectorBlock extends GenericCrafter {
     public SteamDetectorBlock(String name) {
         super(name);
-        // 不可见，无碰撞，不可破坏
+        size = 1;
         solid = false;
-        hidden = true;
-        deployable = false;
-        destructible = false;
         update = true;
+        hasPower = false;
+        hasItems = false;
+        hasLiquids = false;
         health = 999999;
-        // 不需要在科技树里
-        alwaysUnlocked = false;
+        craftTime = 1f;
+        requirements(Category.crafting, mindustry.type.ItemStack.with());
     }
-    public class Build extends BlockBuilding {
+    public class Build extends GenericCrafterBuild {
         private int tickCounter = 0;
         @Override
         public void update() {

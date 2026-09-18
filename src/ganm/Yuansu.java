@@ -18,6 +18,7 @@ import ganm.content.blocks.SerpuloElectrolyzer;
 import ganm.content.blocks.SteamDetectorBlock;
 import ganm.tech.ErekirTechTree;
 import ganm.tech.SerpuloTechTree;
+import arc.Core;
 import mindustry.Vars;
 /**
  * 元素模组主类
@@ -54,7 +55,7 @@ public class Yuansu extends Mod {
         ErekirTechTree.load();
         SerpuloTechTree.load();
         // 延迟自动放置蒸汽检测器到地图中心
-        Vars.app.post(() -> {
+        Core.app.postRunnable(() -> {
             try {
                 int cx = Vars.world.width() / 2;
                 int cy = Vars.world.height() / 2;
