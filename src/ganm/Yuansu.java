@@ -1,6 +1,5 @@
 package ganm;
 import arc.util.*;
-import arc.Events;
 import mindustry.mod.*;
 import mindustry.game.EventType;
 import mindustry.gen.Building;
@@ -54,34 +53,20 @@ public class Yuansu extends Mod {
         // 科技树（双星球）
         ErekirTechTree.load();
         SerpuloTechTree.load();
-        // 全局蒸汽烫伤检测：每帧触发，每10帧实际检测一次
-        Events.on(EventType.Trigger.update, () -> {
-            tickCounter++;
-            if (tickCounter % 10 != 0) return;
-            // 全局扫描所有单位
-            for (Unit unit : Groups.unit) {
-                if (!unit.isValid()) continue;
-                // 检查单位周围3格内有没有存储水蒸气的建筑
-                boolean nearSteam = false;
-                int ux = (int)(unit.x / 8);
-                int uy = (int)(unit.y / 8);
-                for (int x = ux - 3; x <= ux + 3; x++) {
-                    for (int y = uy - 3; y <= uy + 3; y++) {
-                        var tile = Vars.world.tile(x, y);
-                        if (tile == null) continue;
-                        var build = tile.build;
-                        if (build == null || build.liquids == null) continue;
-                        if (build.liquids.currentAmount() <= 0) continue;
-                        if (build.liquids.current() == Steam.liquid) {
-                            nearSteam = true;
-                            break;
-                        }
-                    }
-                    if (nearSteam) break;
+        // 监听世界加载事件，世界加载完成后自动放置蒸汽检测方块
+        Events.on(EventType.WorldLoadEvent.class, e -> {
+            Log.info("World loaded, placing steam detector...");
+            try {
+                int cx = Vars.world.width() / 2;
+                int cy = Vars.world.height() / 2;
+                var tile = Vars.world.tile(cx, cy);
+                if (tile != null) {
+                    // 使用蒸汽管道作为检测方块，放在地图中心
+                    tile.setBlock(Vars.content.block("steam-conduit"));
+                    Log.info("Steam detector placed at " + cx + ", " + cy);
                 }
-                if (nearSteam) {
-                    unit.apply(Scalding.effect, 60f); // 持续1秒
-                }
+            } catch (Exception ex) {
+                Log.err("Failed to place steam detector: " + ex.getMessage());
             }
         });
         Log.info("Steam scald detection initialized.");
