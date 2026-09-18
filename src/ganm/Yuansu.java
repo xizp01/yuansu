@@ -16,7 +16,7 @@ import ganm.content.blocks.ProtiumSeparator;
 import ganm.content.blocks.DeuteriumSeparator;
 import ganm.content.blocks.TritiumSeparator;
 import ganm.content.blocks.SerpuloElectrolyzer;
-import ganm.content.blocks.SteamConduit;
+import ganm.content.blocks.SteamScaldDetector;
 import ganm.tech.ErekirTechTree;
 import ganm.tech.SerpuloTechTree;
 import mindustry.Vars;
@@ -45,8 +45,8 @@ public class Yuansu extends Mod {
         DeuteriumSeparator.load();
         TritiumSeparator.load();
         SerpuloElectrolyzer.load();
-        // 蒸汽管道
-        new SteamConduit("steam-conduit");
+        // 蒸汽烫伤检测器（隐形自动放置）
+        new SteamScaldDetector("steam-scald-detector");
         Log.info("Yuansu mod content loaded.");
     }
     @Override
@@ -56,18 +56,17 @@ public class Yuansu extends Mod {
         SerpuloTechTree.load();
         // 监听世界加载事件，世界加载完成后自动放置蒸汽检测方块
         Events.on(EventType.WorldLoadEvent.class, e -> {
-            Log.info("World loaded, placing steam detector...");
+            Log.info("World loaded, placing steam scald detector...");
             try {
                 int cx = Vars.world.width() / 2;
                 int cy = Vars.world.height() / 2;
                 var tile = Vars.world.tile(cx, cy);
                 if (tile != null) {
-                    // 使用蒸汽管道作为检测方块，放在地图中心
-                    tile.setBlock(Vars.content.block("steam-conduit"));
-                    Log.info("Steam detector placed at " + cx + ", " + cy);
+                    tile.setBlock(Vars.content.block("steam-scald-detector"));
+                    Log.info("Steam scald detector placed at " + cx + ", " + cy);
                 }
             } catch (Exception ex) {
-                Log.err("Failed to place steam detector: " + ex.getMessage());
+                Log.err("Failed to place steam scald detector: " + ex.getMessage());
             }
         });
         Log.info("Steam scald detection initialized.");

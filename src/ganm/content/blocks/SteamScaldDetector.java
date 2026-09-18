@@ -1,34 +1,35 @@
 package ganm.content.blocks;
-import arc.graphics.Color;
+import mindustry.Vars;
 import mindustry.type.Category;
-import mindustry.world.blocks.liquid.Conduit;
-import mindustry.content.Items;
+import mindustry.world.blocks.production.GenericCrafter;
 import mindustry.gen.Groups;
 import mindustry.gen.Unit;
 import ganm.content.liquids.Steam;
 import ganm.content.status.Scalding;
 /**
- * 蒸汽管道
- * 专门运输高温水蒸气的管道，也可以运输其他液体。
- * 同时承担全局蒸汽烫伤检测的职责。
+ * 蒸汽烫伤检测器
+ * 完全隐形、无碰撞、不可建造的检测方块，游戏加载时自动放置在地图中心。
+ * 每10帧全局扫描所有单位，附近有水蒸气的施加烫伤。
  */
-public class SteamConduit extends Conduit {
-    public SteamConduit(String name) {
+public class SteamScaldDetector extends GenericCrafter {
+    public SteamScaldDetector(String name) {
         super(name);
-        requirements(Category.liquid, mindustry.type.ItemStack.with(
-            Items.copper, 1,
-            Items.metaglass, 1
-        ));
-        botColor = Color.valueOf("8b4513"); // 棕红色，体现高温蒸汽
+        size = 1;
+        solid = false;
+        update = true;
+        hasPower = false;
+        hasItems = false;
+        hasLiquids = false;
+        health = 999999;
+        craftTime = 1f;
+        requirements(Category.crafting, mindustry.type.ItemStack.with());
     }
-    public class Build extends ConduitBuild {
+    public class Build extends GenericCrafterBuild {
         private int tickCounter = 0;
         @Override
         public void updateTile() {
-            super.updateTile();
-            // 全局蒸汽烫伤检测：每10帧执行一次
             tickCounter++;
-            if (tickCounter % 10 != 0) return;
+            if (tickCounter % 10 != 0) return; // 每10帧检测一次
             // 全局扫描所有单位
             for (Unit unit : Groups.unit) {
                 if (!unit.isValid()) continue;
@@ -38,7 +39,7 @@ public class SteamConduit extends Conduit {
                 int uy = (int)(unit.y / 8);
                 for (int x = ux - 3; x <= ux + 3; x++) {
                     for (int y = uy - 3; y <= uy + 3; y++) {
-                        var tile = mindustry.Vars.world.tile(x, y);
+                        var tile = Vars.world.tile(x, y);
                         if (tile == null) continue;
                         var build = tile.build;
                         if (build == null || build.liquids == null) continue;
