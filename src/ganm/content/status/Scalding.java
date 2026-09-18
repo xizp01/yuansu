@@ -11,7 +11,7 @@ public class Scalding {
         effect = new StatusEffect("scalding") {{
             color = Color.valueOf("ff9955");
             damage = 0.35f;
-            effect = mindustry.content.Fx.hotStatus;
+            effect = mindustry.content.Fx.hot;
             transitionDamage = 8f;
         }};
     }
