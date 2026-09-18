@@ -1,8 +1,10 @@
 package ganm.content.blocks;
-import mindustry.Vars;
+import arc.graphics.Color;
 import mindustry.type.Category;
+import mindustry.type.Liquid;
 import mindustry.world.blocks.liquid.Conduit;
 import mindustry.content.Items;
+import mindustry.gen.Building;
 import mindustry.gen.Groups;
 import mindustry.gen.Unit;
 import ganm.content.liquids.Steam;
@@ -19,14 +21,18 @@ public class SteamConduit extends Conduit {
             Items.copper, 1,
             Items.metaglass, 1
         ));
-        // 可以运输所有液体，包括水蒸气
-        // 水蒸气只能在这个管道里运输
+        botColor = Color.valueOf("8b4513"); // 棕红色，体现高温蒸汽
     }
     public class Build extends ConduitBuild {
         private int tickCounter = 0;
         @Override
-        public void update() {
-            super.update();
+        public boolean acceptLiquid(Building source, Liquid liquid) {
+            // 接受所有液体，包括水蒸气
+            return super.acceptLiquid(source, liquid);
+        }
+        @Override
+        public void updateTile() {
+            super.updateTile();
             // 蒸汽烫伤检测：每10帧执行一次
             tickCounter++;
             if (tickCounter % 10 != 0) return;
