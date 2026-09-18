@@ -5,6 +5,8 @@ import ganm.content.liquids.Protium;
 import ganm.content.liquids.Deuterium;
 import ganm.content.liquids.Tritium;
 import ganm.content.liquids.Oxygen;
+import ganm.content.liquids.Steam;
+import ganm.content.status.Scalding;
 import ganm.content.blocks.ProtiumSeparator;
 import ganm.content.blocks.DeuteriumSeparator;
 import ganm.content.blocks.TritiumSeparator;
@@ -22,11 +24,14 @@ public class Yuansu extends Mod {
     }
     @Override
     public void loadContent() {
-        // 气体
+        // 状态效果
+        Scalding.load();
+        // 气体/液体
         Oxygen.load();
         Protium.load();
         Deuterium.load();
         Tritium.load();
+        Steam.load();
         // 工厂
         ProtiumSeparator.load();
         DeuteriumSeparator.load();
