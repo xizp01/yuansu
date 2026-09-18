@@ -16,7 +16,6 @@ import ganm.content.blocks.ProtiumSeparator;
 import ganm.content.blocks.DeuteriumSeparator;
 import ganm.content.blocks.TritiumSeparator;
 import ganm.content.blocks.SerpuloElectrolyzer;
-import ganm.content.blocks.SteamScaldDetector;
 import ganm.tech.ErekirTechTree;
 import ganm.tech.SerpuloTechTree;
 import mindustry.Vars;
@@ -45,8 +44,6 @@ public class Yuansu extends Mod {
         DeuteriumSeparator.load();
         TritiumSeparator.load();
         SerpuloElectrolyzer.load();
-        // 蒸汽烫伤检测器（隐形自动放置）
-        new SteamScaldDetector("steam-scald-detector");
         Log.info("Yuansu mod content loaded.");
     }
     @Override
@@ -54,21 +51,28 @@ public class Yuansu extends Mod {
         // 科技树（双星球）
         ErekirTechTree.load();
         SerpuloTechTree.load();
-        // 监听世界加载事件，世界加载完成后自动放置蒸汽检测方块
-        Events.on(EventType.WorldLoadEvent.class, e -> {
-            Log.info("World loaded, placing steam scald detector...");
-            try {
-                int cx = Vars.world.width() / 2;
-                int cy = Vars.world.height() / 2;
-                var tile = Vars.world.tile(cx, cy);
-                if (tile != null) {
-                    tile.setBlock(Vars.content.block("steam-scald-detector"));
-                    Log.info("Steam scald detector placed at " + cx + ", " + cy);
-                }
-            } catch (Exception ex) {
-                Log.err("Failed to place steam scald detector: " + ex.getMessage());
+        // 全局蒸汽烫伤检测：用Trigger.update事件，每10帧执行一次
+        Events.run(EventType.Trigger.update, () -> {
+            tickCounter++;
+            if (tickCounter % 10 != 0) return;
+            // 遍历所有建筑
+            for (Building build : Groups.build) {
+                if (build == null || build.liquids == null) continue;
+                if (build.liquids.currentAmount() <= 0) continue;
+                if (build.liquids.current() != Steam.liquid) continue;
+                // 这个建筑存有水蒸气，扫描周围单位
+                float buildX = build.x;
+                float buildY = build.y;
+                float radius = 24f; // 3格半径
+                Groups.unit.each(unit -> {
+                    if (!unit.isValid()) return;
+                    float dist = unit.dst(buildX, buildY);
+                    if (dist < radius) {
+                        unit.apply(Scalding.effect, 60f); // 持续1秒
+                    }
+                });
             }
         });
-        Log.info("Steam scald detection initialized.");
+        Log.info("Steam scald detection initialized via Trigger.update.");
     }
 }
