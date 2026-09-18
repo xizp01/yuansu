@@ -54,19 +54,17 @@ public class Yuansu extends Mod {
         // 科技树（双星球）
         ErekirTechTree.load();
         SerpuloTechTree.load();
-        // 延迟自动放置蒸汽检测器到地图中心
-        Core.app.postRunnable(() -> {
-            try {
-                int cx = Vars.world.width() / 2;
-                int cy = Vars.world.height() / 2;
-                var tile = Vars.world.tile(cx, cy);
-                if (tile != null) {
-                    tile.setBlock(Vars.content.block("steam-detector"));
-                    Log.info("Steam detector placed at " + cx + ", " + cy);
-                }
-            } catch (Exception e) {
-                Log.err("Failed to place steam detector: " + e.getMessage());
+        // 自动放置蒸汽检测器到地图中心
+        try {
+            int cx = Vars.world.width() / 2;
+            int cy = Vars.world.height() / 2;
+            var tile = Vars.world.tile(cx, cy);
+            if (tile != null) {
+                tile.setBlock(Vars.content.block("steam-detector"));
+                Log.info("Steam detector placed at " + cx + ", " + cy);
             }
-        });
+        } catch (Exception e) {
+            Log.err("Failed to place steam detector: " + e.getMessage());
+        }
     }
 }
