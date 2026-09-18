@@ -1,4 +1,5 @@
 package ganm.content.blocks;
+import mindustry.Vars;
 import mindustry.type.*;
 import mindustry.world.blocks.production.*;
 import mindustry.content.*;
@@ -57,7 +58,7 @@ public class SerpuloElectrolyzerBlock extends GenericCrafter {
                 boolean nearSteam = false;
                 for (int x = (int)(unit.x/8 - 3); x <= (int)(unit.x/8 + 3); x++) {
                     for (int y = (int)(unit.y/8 - 3); y <= (int)(unit.y/8 + 3); y++) {
-                        var tile = world.tile(x, y);
+                        var tile = Vars.world.tile(x, y);
                         if (tile == null) continue;
                         var build = tile.build;
                         if (build == null || build.liquids == null) continue;
