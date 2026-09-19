@@ -61,9 +61,6 @@ public class Yuansu extends Mod {
 
         // 【D-A方案】低频率筛选轮询 + Seq缓存有效建筑
         Events.run(EventType.Trigger.update, () -> {
-            // 多人联机：只在服务端执行逻辑，单机时Vars.net.server()同样为true
-            if (!Vars.net.server()) return;
-
             tickCounter++;
             // 每10帧执行一轮完整检测（每秒6次）
             if (tickCounter % 10 != 0) return;
@@ -81,8 +78,8 @@ public class Yuansu extends Mod {
                 float steamAmount = build.liquids.currentAmount();
                 Liquid currentLiquid = build.liquids.current();
 
-                // 3.条件1：流体必须是水蒸气，并且存量大于阈值2
-                if (currentLiquid != Steam.liquid || steamAmount <= 2f) continue;
+                // 3.条件1：流体必须是水蒸气，并且存量大于0
+                if (currentLiquid != Steam.liquid || steamAmount <= 0f) continue;
 
                 // 4.条件2：排除蒸汽管道，该管道装蒸汽也不会烫伤
                 if (build.block.name.equals("steam-conduit")) continue;
@@ -94,20 +91,16 @@ public class Yuansu extends Mod {
             // ==========第二步：只遍历筛选出来的少量建筑，执行烫伤==========
             for (Building b : hotSteamBuilds) {
                 float radius = 24f; // 24像素 = 3格半径
+                float bx = b.x;
+                float by = b.y;
 
-                // intersect：引擎空间索引，只取出这个矩形范围内的单位
-                Groups.unit.intersect(
-                    b.x - radius,
-                    b.y - radius,
-                    radius * 2f,
-                    radius * 2f,
-                    unit -> {
-                        if (unit.isValid()) {
-                            // 给单位施加烫伤状态，持续60帧=1秒
-                            unit.apply(Scalding.effect, 60f);
-                        }
+                // 遍历范围内的单位施加烫伤
+                Groups.unit.each(unit -> {
+                    if (!unit.isValid()) return;
+                    if (unit.dst(bx, by) < radius) {
+                        unit.apply(Scalding.effect, 60f);
                     }
-                );
+                });
             }
         });
 
