@@ -81,8 +81,8 @@ public class Yuansu extends Mod {
                 // 3.条件1：流体必须是水蒸气，并且存量大于阈值2（微量残余不触发）
                 if (currentLiquid != Steam.liquid || steamAmount <= 2f) continue;
 
-                // 4.条件2：排除蒸汽管道，该管道装蒸汽也不会烫伤（阈值对蒸汽管道不生效）
-                if (build.block.name.equals("steam-conduit")) continue;
+                // 4.条件2：排除蒸汽管道，该管道装蒸汽也不会烫伤（用对象引用比较，最准确）
+                if (build.block == SteamConduit.block) continue;
 
                 // 全部条件满足 → 加入待处理集合
                 hotSteamBuilds.add(build);
