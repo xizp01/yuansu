@@ -46,7 +46,7 @@ public class Yuansu extends Mod {
         TritiumSeparator.load();
         SerpuloElectrolyzer.load();
         // 蒸汽管道（安全运输，不造成烫伤）
-        new SteamConduit("steam-conduit");
+        SteamConduit.load();
         Log.info("Yuansu mod content loaded.");
     }
     @Override
