@@ -14,6 +14,7 @@ import ganm.content.liquids.Tritium;
 import ganm.content.blocks.ProtiumSeparator;
 import ganm.content.blocks.DeuteriumSeparator;
 import ganm.content.blocks.TritiumSeparator;
+import ganm.content.blocks.SteamGenerator;
 
 /**
  * 埃里克尔星球科技树注册
@@ -33,6 +34,19 @@ public class ErekirTechTree {
     public static void load() {
         TechNode electrolyzerNode = findNode(Planets.erekir.techTree, Blocks.electrolyzer);
         TechNode parentNode = (electrolyzerNode != null) ? electrolyzerNode : Planets.erekir.techTree;
+
+        // 蒸汽发生器 -> 水蒸气（挂在电解机旁边，研究消耗：基础材料）
+        TechNode steamGenNode = node(SteamGenerator.block, ItemStack.with(
+            Items.copper, 80,
+            Items.lead, 60,
+            Items.titanium, 20,
+            Items.silicon, 25,
+            Items.metaglass, 15
+        ), () -> {
+            nodeProduce(ganm.content.liquids.Steam.liquid, () -> {});
+        });
+        steamGenNode.parent = parentNode;
+        parentNode.children.add(steamGenNode);
 
         // 氕气分离机 -> 氕气（研究消耗：基础材料）
         TechNode protiumNode = node(ProtiumSeparator.block, ItemStack.with(

@@ -1,5 +1,6 @@
 package ganm;
 import arc.util.*;
+import arc.Core;
 import arc.Events;
 import arc.struct.Seq;
 import mindustry.mod.*;
@@ -19,6 +20,7 @@ import ganm.content.blocks.DeuteriumSeparator;
 import ganm.content.blocks.TritiumSeparator;
 import ganm.content.blocks.SerpuloElectrolyzer;
 import ganm.content.blocks.SteamConduit;
+import ganm.content.blocks.SteamGenerator;
 import ganm.tech.ErekirTechTree;
 import ganm.tech.SerpuloTechTree;
 import mindustry.Vars;
@@ -51,10 +53,15 @@ public class Yuansu extends Mod {
         SerpuloElectrolyzer.load();
         // 蒸汽管道（安全运输，不造成烫伤）
         SteamConduit.load();
+        // 蒸汽发生器（燃烧煤加热水产生水蒸气）
+        SteamGenerator.load();
         Log.info("Yuansu mod content loaded.");
     }
     @Override
     public void init() {
+        // 手动设置烫伤状态图标，确保在游戏中显示
+        Scalding.effect.icon = Core.atlas.find("status-yuansu-scalding");
+
         // 科技树（双星球）
         ErekirTechTree.load();
         SerpuloTechTree.load();

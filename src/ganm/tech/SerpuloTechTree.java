@@ -16,6 +16,7 @@ import ganm.content.blocks.ProtiumSeparator;
 import ganm.content.blocks.DeuteriumSeparator;
 import ganm.content.blocks.TritiumSeparator;
 import ganm.content.blocks.SerpuloElectrolyzer;
+import ganm.content.blocks.SteamGenerator;
 /**
  * 塞普罗星球科技树注册
  * 结构：水泵 -> 氢气 -> 制氢机 -> 氕气分离机 -> 氘气分离机 -> 氚气分离机
@@ -39,6 +40,20 @@ public class SerpuloTechTree {
         TechNode hydrogenNode = node(Liquids.hydrogen, () -> {});
         hydrogenNode.parent = parentNode;
         parentNode.children.add(hydrogenNode);
+
+        // 蒸汽发生器 -> 水蒸气（挂在水泵旁边，研究消耗：基础材料）
+        TechNode steamGenNode = node(SteamGenerator.block, ItemStack.with(
+            Items.copper, 80,
+            Items.lead, 60,
+            Items.titanium, 20,
+            Items.silicon, 25,
+            Items.metaglass, 15
+        ), () -> {
+            nodeProduce(ganm.content.liquids.Steam.liquid, () -> {});
+        });
+        steamGenNode.parent = parentNode;
+        parentNode.children.add(steamGenNode);
+
         // 塞普罗制氢机 -> 氧气（副产品，研究消耗：基础材料）
         TechNode electrolyzerNode = node(SerpuloElectrolyzer.block, ItemStack.with(
             Items.copper, 120,
