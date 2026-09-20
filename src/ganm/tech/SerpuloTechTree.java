@@ -1,7 +1,9 @@
 package ganm.tech;
 import arc.util.*;
 import mindustry.ctype.*;
+import mindustry.type.ItemStack;
 import mindustry.content.Blocks;
+import mindustry.content.Items;
 import mindustry.content.Liquids;
 import mindustry.content.Planets;
 import mindustry.content.TechTree.TechNode;
@@ -33,30 +35,53 @@ public class SerpuloTechTree {
         // 查找塞普罗水泵节点作为父节点，找不到则挂根节点
         TechNode pumpNode = findNode(Planets.serpulo.techTree, Blocks.waterExtractor);
         TechNode parentNode = (pumpNode != null) ? pumpNode : Planets.serpulo.techTree;
-        // 氢气节点（挂在水泵下）
+        // 氢气节点（挂在水泵下，无消耗）
         TechNode hydrogenNode = node(Liquids.hydrogen, () -> {});
         hydrogenNode.parent = parentNode;
         parentNode.children.add(hydrogenNode);
-        // 塞普罗制氢机 -> 氧气（副产品）
-        TechNode electrolyzerNode = node(SerpuloElectrolyzer.block, () -> {
+        // 塞普罗制氢机 -> 氧气（副产品，研究消耗：基础材料）
+        TechNode electrolyzerNode = node(SerpuloElectrolyzer.block, ItemStack.with(
+            Items.copper, 120,
+            Items.lead, 100,
+            Items.titanium, 40,
+            Items.silicon, 50
+        ), () -> {
             nodeProduce(Oxygen.liquid, () -> {});
         });
         electrolyzerNode.parent = hydrogenNode;
         hydrogenNode.children.add(electrolyzerNode);
-        // 氕气分离机 -> 氕气
-        TechNode protiumNode = node(ProtiumSeparator.block, () -> {
+        // 氕气分离机 -> 氕气（研究消耗：基础材料）
+        TechNode protiumNode = node(ProtiumSeparator.block, ItemStack.with(
+            Items.copper, 100,
+            Items.lead, 80,
+            Items.titanium, 30,
+            Items.silicon, 30
+        ), () -> {
             nodeProduce(Protium.liquid, () -> {});
         });
         protiumNode.parent = electrolyzerNode;
         electrolyzerNode.children.add(protiumNode);
-        // 氘气分离机 -> 氘气
-        TechNode deuteriumNode = node(DeuteriumSeparator.block, () -> {
+        // 氘气分离机 -> 氘气（研究消耗：中级材料）
+        TechNode deuteriumNode = node(DeuteriumSeparator.block, ItemStack.with(
+            Items.copper, 150,
+            Items.lead, 120,
+            Items.titanium, 60,
+            Items.silicon, 60,
+            Items.plastanium, 30
+        ), () -> {
             nodeProduce(Deuterium.liquid, () -> {});
         });
         deuteriumNode.parent = protiumNode;
         protiumNode.children.add(deuteriumNode);
-        // 氚气分离机 -> 氚气
-        TechNode tritiumNode = node(TritiumSeparator.block, () -> {
+        // 氚气分离机 -> 氚气（研究消耗：高级材料）
+        TechNode tritiumNode = node(TritiumSeparator.block, ItemStack.with(
+            Items.copper, 200,
+            Items.lead, 150,
+            Items.titanium, 100,
+            Items.silicon, 100,
+            Items.plastanium, 60,
+            Items.surgeAlloy, 30
+        ), () -> {
             nodeProduce(Tritium.liquid, () -> {});
         });
         tritiumNode.parent = deuteriumNode;
