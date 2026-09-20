@@ -38,7 +38,9 @@ public class SteamGenerator {
             consumeItem(Items.coal, 2);
 
             // 输出：水蒸气8（水蒸发体积膨胀，有损耗）
-            outputLiquid = new LiquidStack(Steam.liquid, 8f);
+            outputLiquids = new LiquidStack[]{
+                new LiquidStack(Steam.liquid, 8f)
+            };
 
             // 工业锅炉效果：火焰+蒸汽
             craftEffect = Fx.vapor;
