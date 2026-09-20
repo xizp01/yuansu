@@ -59,8 +59,8 @@ public class Yuansu extends Mod {
     }
     @Override
     public void init() {
-        // 手动设置烫伤状态图标，确保在游戏中显示
-        Scalding.effect.icon = Core.atlas.find("status-yuansu-scalding");
+        // 手动设置烫伤状态图标（暂时注释，排查编译错误）
+        // Scalding.effect.icon = Core.atlas.find("status-yuansu-scalding");
 
         // 科技树（双星球）
         ErekirTechTree.load();
