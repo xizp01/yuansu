@@ -31,9 +31,9 @@ public class SteamGenerator {
             hasLiquids = true;
             liquidCapacity = 40f;
 
-            // 输入：水10 + 煤2（燃料加热水）
+            // 输入：水10（燃料加热水，物品消耗暂时注释）
             consumeLiquid(Liquids.water, 10f);
-            consumeItems(ItemStack.with(Items.coal, 2));
+            // consumeItems(ItemStack.with(Items.coal, 2));
 
             // 输出：水蒸气8（水蒸发体积膨胀，有损耗）
             outputLiquid = new LiquidStack(Steam.liquid, 8f);
