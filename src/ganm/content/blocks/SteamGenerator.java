@@ -29,9 +29,7 @@ public class SteamGenerator {
             craftTime = 60f;
             hasItems = true;
             hasLiquids = true;
-            hasPower = false; // 燃料加热，不需要电力
             liquidCapacity = 40f;
-            itemCapacity = 20;
 
             // 输入：水10 + 煤2（燃料加热水）
             consumeLiquid(Liquids.water, 10f);
