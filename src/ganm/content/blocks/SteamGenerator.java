@@ -27,15 +27,15 @@ public class SteamGenerator {
             size = 2;
             health = 250;
             craftTime = 60f;
-            hasItems = true;
+            hasPower = true;
             hasLiquids = true;
             liquidCapacity = 40f;
 
-            // 输入：水10（燃料加热水，物品消耗暂时注释）
+            // 输入：水10（电力加热水）
             consumeLiquid(Liquids.water, 10f);
-            // consumeItems(ItemStack.with(Items.coal, 2));
+            consumePower(2.0f);
 
-            // 输出：水蒸气8（水蒸发体积膨胀，有损耗）
+            // 输出：水蒸气8
             outputLiquid = new LiquidStack(Steam.liquid, 8f);
 
             // 工业锅炉效果：火焰+蒸汽
