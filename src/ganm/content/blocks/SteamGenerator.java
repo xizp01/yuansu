@@ -35,12 +35,10 @@ public class SteamGenerator {
 
             // 输入：水10 + 煤2（燃料加热水）
             consumeLiquid(Liquids.water, 10f);
-            consumeItem(Items.coal, 2);
+            consumeItems(ItemStack.with(Items.coal, 2));
 
             // 输出：水蒸气8（水蒸发体积膨胀，有损耗）
-            outputLiquids = new LiquidStack[]{
-                new LiquidStack(Steam.liquid, 8f)
-            };
+            outputLiquid = new LiquidStack(Steam.liquid, 8f);
 
             // 工业锅炉效果：火焰+蒸汽
             craftEffect = Fx.vapor;
