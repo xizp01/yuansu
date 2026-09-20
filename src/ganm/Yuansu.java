@@ -70,9 +70,12 @@ public class Yuansu extends Mod {
 
             // ==========第一步：遍历全图所有建筑，筛选符合条件的建筑==========
             for (Building build : Groups.build) {
+                // 0.快速筛选：只检查有液体能力的方块（管道、水泵、储罐、工厂等）
+                // 墙壁、炮台、传送带等没有液体能力的方块直接跳过，大幅减少循环次数
+                if (!build.block.hasLiquids) continue;
                 // 1.建筑无效：已经被拆除、销毁，直接跳过
                 if (!build.isValid()) continue;
-                // 2.建筑没有流体组件（墙壁、炮台等）直接跳过
+                // 2.建筑没有流体组件直接跳过
                 if (build.liquids == null) continue;
 
                 float steamAmount = build.liquids.currentAmount();
