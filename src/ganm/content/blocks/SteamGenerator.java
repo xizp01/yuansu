@@ -2,9 +2,9 @@ package ganm.content.blocks;
 
 import mindustry.type.*;
 import mindustry.world.Block;
+import mindustry.world.blocks.production.*;
 import mindustry.content.*;
 import ganm.content.liquids.Steam;
-import ganm.world.blocks.MultiRecipeCrafter;
 
 /**
  * 蒸汽发生器（工业蒸汽锅炉，多配方）
@@ -17,7 +17,7 @@ public class SteamGenerator {
     public static Block block;
 
     public static void load() {
-        block = new MultiRecipeCrafter("steam-generator") {{
+        block = new GenericCrafter("steam-generator") {{
             requirements(Category.crafting, ItemStack.with(
                 Items.copper, 60,
                 Items.lead, 40,
@@ -45,19 +45,22 @@ public class SteamGenerator {
             shownPlanets.add(Planets.serpulo);
 
             // ========== 多配方定义 ==========
-            recipes = new Recipe[]{
+            recipes = new GenericCrafter[]{
                 // 配方1：燃料加热（水+煤 → 水蒸气，产量高，不需要电）
-                new Recipe()
-                    .items(ItemStack.with(Items.coal, 2))
-                    .liquids(new LiquidStack(Liquids.water, 10f))
-                    .outputLiquid(new LiquidStack(Steam.liquid, 10f))
-                    .craftTime(50f),
+                new GenericCrafter("steam-coal") {{
+                    craftTime = 50f;
+                    outputLiquid = new LiquidStack(Steam.liquid, 10f);
+                    consumeLiquid(Liquids.water, 10f);
+                    consumeItems(ItemStack.with(Items.coal, 2));
+                }},
 
                 // 配方2：电加热（水+电力 → 水蒸气，产量低，清洁方便）
-                new Recipe()
-                    .liquids(new LiquidStack(Liquids.water, 10f))
-                    .outputLiquid(new LiquidStack(Steam.liquid, 8f))
-                    .craftTime(60f)
+                new GenericCrafter("steam-power") {{
+                    craftTime = 60f;
+                    outputLiquid = new LiquidStack(Steam.liquid, 8f);
+                    consumeLiquid(Liquids.water, 10f);
+                    consumePower(3.0f);
+                }}
             };
         }};
     }
