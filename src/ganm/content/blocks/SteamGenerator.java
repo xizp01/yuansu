@@ -17,7 +17,7 @@ public class SteamGenerator {
     public static Block block;
 
     public static void load() {
-        block = new GenericMultiCrafter("steam-generator") {{
+        block = new GenericCrafter("steam-generator") {{
             requirements(Category.crafting, ItemStack.with(
                 Items.copper, 60,
                 Items.lead, 40,
