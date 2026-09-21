@@ -2,22 +2,20 @@ package ganm.content.blocks;
 
 import mindustry.type.*;
 import mindustry.world.Block;
+import mindustry.world.blocks.production.*;
 import mindustry.content.*;
 import ganm.content.liquids.Steam;
-import ganm.world.blocks.MultiRecipeCrafter;
 
 /**
- * 蒸汽发生器（工业蒸汽锅炉，多配方）
- * 支持两种加热方式：
- * 配方1：燃料加热（水+煤 → 水蒸气，产量高，不需要电）
- * 配方2：电加热（水+电力 → 水蒸气，产量低，清洁方便）
+ * 蒸汽发生器（工业蒸汽锅炉）
+ * 通过电力加热水产生高温水蒸气，为蒸汽动力系统提供气源。
  * 所属星球：埃里克尔、塞普罗通用
  */
 public class SteamGenerator {
     public static Block block;
 
     public static void load() {
-        block = new MultiRecipeCrafter("steam-generator") {{
+        block = new GenericCrafter("steam-generator") {{
             requirements(Category.crafting, ItemStack.with(
                 Items.copper, 60,
                 Items.lead, 40,
@@ -27,8 +25,17 @@ public class SteamGenerator {
             ));
             size = 2;
             health = 250;
+            craftTime = 60f;
+            hasPower = true;
+            hasLiquids = true;
             liquidCapacity = 40f;
-            itemCapacity = 20;
+
+            // 输入：水10 + 电力2kW（电加热水）
+            consumeLiquid(Liquids.water, 10f);
+            consumePower(2.0f);
+
+            // 输出：水蒸气8
+            outputLiquid = new LiquidStack(Steam.liquid, 8f);
 
             // 工业锅炉效果：火焰+蒸汽
             craftEffect = Fx.vapor;
@@ -40,24 +47,6 @@ public class SteamGenerator {
             // 双星球通用
             shownPlanets.add(Planets.erekir);
             shownPlanets.add(Planets.serpulo);
-
-            // ========== 多配方定义 ==========
-            recipes.add(
-                // 配方1：燃料加热（水+煤 → 水蒸气，产量高，不需要电）
-                new Recipe()
-                    .items(ItemStack.with(Items.coal, 2))
-                    .liquids(new LiquidStack(Liquids.water, 10f))
-                    .outputLiquid(new LiquidStack(Steam.liquid, 10f))
-                    .craftTime(50f)
-            );
-
-            recipes.add(
-                // 配方2：电加热（水+电力 → 水蒸气，产量低，清洁方便）
-                new Recipe()
-                    .liquids(new LiquidStack(Liquids.water, 10f))
-                    .outputLiquid(new LiquidStack(Steam.liquid, 8f))
-                    .craftTime(60f)
-            );
         }};
     }
 }
