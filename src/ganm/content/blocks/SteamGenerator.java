@@ -7,16 +7,17 @@ import mindustry.content.*;
 import ganm.content.liquids.Steam;
 
 /**
- * 蒸汽发生器（工业蒸汽锅炉）
- * 通过燃烧煤炭加热水产生高温水蒸气，为蒸汽动力系统提供气源。
- * 现实逻辑：水 + 燃料（煤）→ 高温水蒸气
+ * 蒸汽发生器（工业蒸汽锅炉，多配方）
+ * 支持两种加热方式：
+ * 配方1：燃料加热（水+煤 → 水蒸气，产量高，不需要电）
+ * 配方2：电加热（水+电力 → 水蒸气，产量低，清洁方便）
  * 所属星球：埃里克尔、塞普罗通用
  */
 public class SteamGenerator {
     public static Block block;
 
     public static void load() {
-        block = new GenericCrafter("steam-generator") {{
+        block = new GenericMultiCrafter("steam-generator") {{
             requirements(Category.crafting, ItemStack.with(
                 Items.copper, 60,
                 Items.lead, 40,
@@ -26,17 +27,11 @@ public class SteamGenerator {
             ));
             size = 2;
             health = 250;
-            craftTime = 60f;
-            hasPower = true;
+            hasItems = true;
             hasLiquids = true;
+            hasPower = true;
             liquidCapacity = 40f;
-
-            // 输入：水10（电力加热水）
-            consumeLiquid(Liquids.water, 10f);
-            consumePower(2.0f);
-
-            // 输出：水蒸气8
-            outputLiquid = new LiquidStack(Steam.liquid, 8f);
+            itemCapacity = 20;
 
             // 工业锅炉效果：火焰+蒸汽
             craftEffect = Fx.vapor;
@@ -48,6 +43,25 @@ public class SteamGenerator {
             // 双星球通用
             shownPlanets.add(Planets.erekir);
             shownPlanets.add(Planets.serpulo);
+
+            // ========== 多配方定义 ==========
+            recipes = new GenericCrafter[]{
+                // 配方1：燃料加热（水+煤 → 水蒸气，产量高，不需要电）
+                new GenericCrafter("steam-coal") {{
+                    craftTime = 50f;
+                    outputLiquid = new LiquidStack(Steam.liquid, 10f);
+                    consumeLiquid(Liquids.water, 10f);
+                    consumeItems(ItemStack.with(Items.coal, 2));
+                }},
+
+                // 配方2：电加热（水+电力 → 水蒸气，产量低，清洁方便）
+                new GenericCrafter("steam-power") {{
+                    craftTime = 60f;
+                    outputLiquid = new LiquidStack(Steam.liquid, 8f);
+                    consumeLiquid(Liquids.water, 10f);
+                    consumePower(3.0f);
+                }}
+            };
         }};
     }
 }
