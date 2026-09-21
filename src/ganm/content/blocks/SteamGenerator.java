@@ -54,9 +54,15 @@ public class SteamGenerator extends GenericCrafter {
         });
 
         buildType = SteamGenBuild::new;
+
+        // 配方切换回调（联机安全：UI 调 configure -> 服务端执行此 lambda）
+        config(Integer.class, (SteamGenBuild build, Integer i) -> {
+            build.currentRecipe = Math.max(0, Math.min(1, i));
+            build.prog = 0f;
+        });
     }
 
-    public static void load() {
+    public static void register() {
         block = new SteamGenerator("steam-generator");
     }
 
@@ -110,14 +116,6 @@ public class SteamGenerator extends GenericCrafter {
                         .checked(currentRecipe == idx)
                         .size(150, 40).pad(4);
                 table.row();
-            }
-        }
-
-        @Override
-        public void configured(Object value) {
-            if (value instanceof Integer i) {
-                currentRecipe = Math.max(0, Math.min(1, i));
-                prog = 0f;
             }
         }
 

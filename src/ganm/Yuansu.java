@@ -54,7 +54,7 @@ public class Yuansu extends Mod {
         // 蒸汽管道（安全运输，不造成烫伤）
         SteamConduit.load();
         // 蒸汽发生器（燃烧煤加热水产生水蒸气）
-        SteamGenerator.load();
+        SteamGenerator.register();
         Log.info("Yuansu mod content loaded.");
     }
     @Override
