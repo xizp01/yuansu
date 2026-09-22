@@ -44,8 +44,9 @@ public class SteamGenerator extends GenericCrafter {
         liquidCapacity = 40f;
         itemCapacity = 20;
 
-        // 注册水输入（让方块接受水管输入）；煤通过 hasItems 默认接受
+        // 注册水输入（让方块接受水管输入）；煤通过 consumeItems 注册接受
         consumeLiquid(Liquids.water, 10f);
+        consumeItems(ItemStack.with(Items.coal, 2));
 
         shownPlanets.add(Planets.erekir);
         shownPlanets.add(Planets.serpulo);
@@ -94,16 +95,16 @@ public class SteamGenerator extends GenericCrafter {
             // 调试日志：每秒输出一次状态，定位 updateTile 是否被调用、卡在哪一步
             debugTick++;
             if (debugTick % 60 == 0) {
-                Log.info("[SteamGen] alive r=@ water=@ coal=@ steam=@ eff=@ canRun? w:@ c:@ s:@ p:@ prog=@",
+                Log.info("[SteamGen] alive r=@ water=@ coal=@ steam=@ pwr=@ canRun? w:@ c:@ s:@ p:@ prog=@",
                     r,
                     (int)liquids.get(Liquids.water),
                     items.get(Items.coal),
                     (int)liquids.get(Steam.liquid),
-                    (int)(efficiency*100),
+                    (power != null ? (int)(power.status*100) : -1),
                     liquids.get(Liquids.water) >= waterAmt[r],
                     (coalAmt[r] <= 0 || items.get(Items.coal) >= coalAmt[r]),
                     liquids.get(Steam.liquid) < liquidCapacity - 0.001f,
-                    (r != 1 || efficiency > 0.01f),
+                    (r != 1 || (power != null && power.status > 0.01f)),
                     (int)prog);
             }
 
@@ -111,8 +112,9 @@ public class SteamGenerator extends GenericCrafter {
             if (liquids.get(Liquids.water) < waterAmt[r]) canRun = false;
             if (coalAmt[r] > 0 && items.get(Items.coal) < coalAmt[r]) canRun = false;
             if (liquids.get(Steam.liquid) >= liquidCapacity - 0.001f) canRun = false;
-            // 仅电加热配方要求电力（efficiency 由 ConsumePower 维护）
-            if (r == 1 && efficiency <= 0.01f) canRun = false;
+            // 仅电加热配方要求电力；注册了 consumeItems(coal) 后 efficiency 会受煤影响，
+            // 所以这里直接读电网状态 power.status，避免煤不够时电加热也被卡住。
+            if (r == 1 && (power == null || power.status <= 0.01f)) canRun = false;
 
             if (!canRun) {
                 return; // 资源不足时暂停，保留已有进度（切换配方时才重置）
@@ -140,6 +142,9 @@ public class SteamGenerator extends GenericCrafter {
                             currentRecipe = idx;
                             prog = 0f;
                             configure(idx);
+                            // 重建配置面板，刷新按钮选中高亮
+                            table.clearChildren();
+                            buildConfiguration(table);
                         })
                         .checked(currentRecipe == idx)
                         .size(150, 40).pad(4);
