@@ -92,6 +92,9 @@ public class SteamGenerator extends GenericCrafter {
         public void updateTile() {
             int r = currentRecipe;
 
+            // 排蒸汽必须在 canRun 检查之前：否则蒸汽一满就 return，永远排不出去，死锁
+            dumpLiquid(Steam.liquid);
+
             // 调试日志：每秒输出一次状态，定位 updateTile 是否被调用、卡在哪一步
             debugTick++;
             if (debugTick % 60 == 0) {
@@ -127,9 +130,6 @@ public class SteamGenerator extends GenericCrafter {
                 if (coalAmt[r] > 0) items.remove(Items.coal, coalAmt[r]);
                 handleLiquid(this, Steam.liquid, steamOut[r]);
             }
-
-            // 持续把蒸汽排到相邻管道
-            dumpLiquid(Steam.liquid);
         }
 
         @Override
