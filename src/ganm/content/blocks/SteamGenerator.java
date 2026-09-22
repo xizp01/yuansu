@@ -44,6 +44,9 @@ public class SteamGenerator extends GenericCrafter {
         liquidCapacity = 40f;
         itemCapacity = 20;
 
+        // 注册水输入（让方块接受水管输入）；煤通过 hasItems 默认接受
+        consumeLiquid(Liquids.water, 10f);
+
         shownPlanets.add(Planets.erekir);
         shownPlanets.add(Planets.serpulo);
 
