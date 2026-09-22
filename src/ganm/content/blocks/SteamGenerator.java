@@ -1,7 +1,6 @@
 package ganm.content.blocks;
 
 import arc.scene.ui.layout.Table;
-import arc.util.Log;
 import arc.util.Time;
 import arc.util.io.Reads;
 import arc.util.io.Writes;
@@ -86,7 +85,6 @@ public class SteamGenerator extends GenericCrafter {
         public int currentRecipe = 0;
         /** 手写进度 0 ~ craftTime[currentRecipe] */
         public float prog = 0f;
-        private int debugTick = 0;
 
         @Override
         public void updateTile() {
@@ -94,22 +92,6 @@ public class SteamGenerator extends GenericCrafter {
 
             // 排蒸汽必须在 canRun 检查之前：否则蒸汽一满就 return，永远排不出去，死锁
             dumpLiquid(Steam.liquid);
-
-            // 调试日志：每秒输出一次状态，定位 updateTile 是否被调用、卡在哪一步
-            debugTick++;
-            if (debugTick % 60 == 0) {
-                Log.info("[SteamGen] alive r=@ water=@ coal=@ steam=@ pwr=@ canRun? w:@ c:@ s:@ p:@ prog=@",
-                    r,
-                    (int)liquids.get(Liquids.water),
-                    items.get(Items.coal),
-                    (int)liquids.get(Steam.liquid),
-                    (power != null ? (int)(power.status*100) : -1),
-                    liquids.get(Liquids.water) >= waterAmt[r],
-                    (coalAmt[r] <= 0 || items.get(Items.coal) >= coalAmt[r]),
-                    liquids.get(Steam.liquid) < liquidCapacity - 0.001f,
-                    (r != 1 || (power != null && power.status > 0.01f)),
-                    (int)prog);
-            }
 
             boolean canRun = true;
             if (liquids.get(Liquids.water) < waterAmt[r]) canRun = false;
@@ -135,6 +117,7 @@ public class SteamGenerator extends GenericCrafter {
         @Override
         public void buildConfiguration(Table table) {
             table.row();
+            // 打开面板时展开两个配方选项
             for (int i = 0; i < 2; i++) {
                 int idx = i;
                 table.button(i == 0 ? "燃料加热（煤）" : "电加热", () -> {
@@ -142,9 +125,10 @@ public class SteamGenerator extends GenericCrafter {
                             currentRecipe = idx;
                             prog = 0f;
                             configure(idx);
-                            // 重建配置面板，刷新按钮选中高亮
+                            // 选择后收起面板，只显示当前配方；下次点机器重新展开
                             table.clearChildren();
-                            buildConfiguration(table);
+                            table.row();
+                            table.add("当前：" + (idx == 0 ? "燃料加热（煤）" : "电加热")).pad(10);
                         })
                         .checked(currentRecipe == idx)
                         .size(150, 40).pad(4);
