@@ -1,6 +1,7 @@
 package ganm.content.blocks;
 
 import arc.scene.ui.layout.Table;
+import arc.util.Time;
 import arc.util.io.Reads;
 import arc.util.io.Writes;
 import mindustry.type.*;
@@ -36,6 +37,7 @@ public class SteamGenerator extends GenericCrafter {
         hasLiquids = true;
         hasItems = true;
         hasPower = true;
+        outputsLiquid = true;
         configurable = true;
         liquidCapacity = 40f;
         itemCapacity = 20;
@@ -91,11 +93,10 @@ public class SteamGenerator extends GenericCrafter {
             if (r == 1 && efficiency <= 0.01f) canRun = false;
 
             if (!canRun) {
-                prog = 0f;
-                return;
+                return; // 资源不足时暂停，保留已有进度（切换配方时才重置）
             }
 
-            prog += delta();
+            prog += Time.delta;
             if (prog >= craftTime[r]) {
                 prog = 0f;
                 liquids.remove(Liquids.water, waterAmt[r]);
@@ -112,7 +113,12 @@ public class SteamGenerator extends GenericCrafter {
             table.row();
             for (int i = 0; i < 2; i++) {
                 int idx = i;
-                table.button(i == 0 ? "燃料加热（煤）" : "电加热", () -> configure(idx))
+                table.button(i == 0 ? "燃料加热（煤）" : "电加热", () -> {
+                            // 本地立即生效（兜底），同时走 configure 保证联机同步
+                            currentRecipe = idx;
+                            prog = 0f;
+                            configure(idx);
+                        })
                         .checked(currentRecipe == idx)
                         .size(150, 40).pad(4);
                 table.row();
