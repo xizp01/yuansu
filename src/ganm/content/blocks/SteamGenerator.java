@@ -1,6 +1,7 @@
 package ganm.content.blocks;
 
 import arc.scene.ui.layout.Table;
+import arc.util.Log;
 import arc.util.Time;
 import arc.util.io.Reads;
 import arc.util.io.Writes;
@@ -34,6 +35,7 @@ public class SteamGenerator extends GenericCrafter {
         ));
         size = 2;
         health = 250;
+        update = true;
         hasLiquids = true;
         hasItems = true;
         hasPower = true;
@@ -80,10 +82,27 @@ public class SteamGenerator extends GenericCrafter {
         public int currentRecipe = 0;
         /** 手写进度 0 ~ craftTime[currentRecipe] */
         public float prog = 0f;
+        private int debugTick = 0;
 
         @Override
         public void updateTile() {
             int r = currentRecipe;
+
+            // 调试日志：每秒输出一次状态，定位 updateTile 是否被调用、卡在哪一步
+            debugTick++;
+            if (debugTick % 60 == 0) {
+                Log.info("[SteamGen] alive r=@ water=@ coal=@ steam=@ eff=@ canRun? w:@ c:@ s:@ p:@ prog=@",
+                    r,
+                    (int)liquids.get(Liquids.water),
+                    items.get(Items.coal),
+                    (int)liquids.get(Steam.liquid),
+                    (int)(efficiency*100),
+                    liquids.get(Liquids.water) >= waterAmt[r],
+                    (coalAmt[r] <= 0 || items.get(Items.coal) >= coalAmt[r]),
+                    liquids.get(Steam.liquid) < liquidCapacity - 0.001f,
+                    (r != 1 || efficiency > 0.01f),
+                    (int)prog);
+            }
 
             boolean canRun = true;
             if (liquids.get(Liquids.water) < waterAmt[r]) canRun = false;
