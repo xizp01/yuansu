@@ -1,6 +1,8 @@
 package ganm.content.blocks;
 
+import arc.graphics.Color;
 import arc.scene.ui.Button;
+import arc.scene.ui.Styles;
 import arc.scene.ui.layout.Table;
 import arc.util.Time;
 import arc.util.io.Reads;
@@ -118,12 +120,22 @@ public class SteamGenerator extends GenericCrafter {
         @Override
         public void buildConfiguration(Table table) {
             table.row();
-            // 展开两个配方选项；点击后选中并关闭配置面板（隐藏）。
-            // 用 update 每帧把当前配方的按钮置为高亮：即使再次打开同一台机器时面板复用、
-            // 不会重新调用 buildConfiguration，也能保证上次选中的按钮保持高亮。
+            // 自定义按钮样式：选中(checked)时白底黑字，视觉高亮非常明显
+            Button.ButtonStyle style = new Button.ButtonStyle();
+            style.up = Styles.black;
+            style.over = Styles.blackOver;
+            style.down = Styles.blackDown;
+            style.checked = Styles.white;
+            style.checkedOver = Styles.whiteOver;
+            style.fontColor = Color.white;
+            style.checkedFontColor = Color.black;
+
             for (int i = 0; i < 2; i++) {
                 int idx = i;
-                table.button(i == 0 ? "燃料加热（煤）" : "电加热", () -> {
+                // 展开两个配方选项；点击后选中并关闭配置面板（隐藏）。
+                // update 每帧把当前配方的按钮置为高亮：即使面板复用、不重建 buildConfiguration，
+                // 再次打开时上次选中的按钮也会白底高亮。
+                table.button(i == 0 ? "燃料加热（煤）" : "电加热", style, () -> {
                             // 本地立即生效（兜底），同时走 configure 保证联机同步
                             currentRecipe = idx;
                             prog = 0f;
