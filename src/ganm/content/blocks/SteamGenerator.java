@@ -1,5 +1,6 @@
 package ganm.content.blocks;
 
+import arc.scene.ui.Button;
 import arc.scene.ui.layout.Table;
 import arc.util.Time;
 import arc.util.io.Reads;
@@ -117,8 +118,9 @@ public class SteamGenerator extends GenericCrafter {
         @Override
         public void buildConfiguration(Table table) {
             table.row();
-            // 展开两个配方选项；点击后选中并高亮，然后整体关闭配置面板（隐藏）。
-            // 再次点击机器会重新调用本方法，.checked(currentRecipe == idx) 使上次选中的按钮保持高亮。
+            // 展开两个配方选项；点击后选中并关闭配置面板（隐藏）。
+            // 用 update 每帧把当前配方的按钮置为高亮：即使再次打开同一台机器时面板复用、
+            // 不会重新调用 buildConfiguration，也能保证上次选中的按钮保持高亮。
             for (int i = 0; i < 2; i++) {
                 int idx = i;
                 table.button(i == 0 ? "燃料加热（煤）" : "电加热", () -> {
@@ -129,7 +131,7 @@ public class SteamGenerator extends GenericCrafter {
                             // 关闭配置面板（隐藏整个选择页）；再次点击机器重新打开并高亮上次选择
                             deselect();
                         })
-                        .checked(currentRecipe == idx)
+                        .update(b -> ((Button)b).setChecked(currentRecipe == idx))
                         .size(150, 40).pad(4);
                 table.row();
             }
