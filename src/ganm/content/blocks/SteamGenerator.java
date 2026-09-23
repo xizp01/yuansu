@@ -126,9 +126,8 @@ public class SteamGenerator extends GenericCrafter {
                             currentRecipe = idx;
                             prog = 0f;
                             configure(idx);
-                            // 关闭配置面板（隐藏整个选择页）
-                            var cfg = getConfig();
-                            if (cfg != null) cfg.hide();
+                            // 关闭配置面板（隐藏整个选择页）；再次点击机器重新打开并高亮上次选择
+                            deselect();
                         })
                         .checked(currentRecipe == idx)
                         .size(150, 40).pad(4);
