@@ -128,7 +128,7 @@ public class SteamGenerator extends GenericCrafter {
                             // 收起：隐藏两个配方按钮，只保留高亮的当前配方；再次点击机器才重新展开
                             table.clearChildren();
                             table.row();
-                            table.button(idx == 0 ? "燃料加热（煤）" : "电加热")
+                            table.button(idx == 0 ? "燃料加热（煤）" : "电加热", () -> {})
                                     .checked(true)
                                     .size(150, 40).pad(4);
                         })
