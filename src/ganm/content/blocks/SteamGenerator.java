@@ -117,7 +117,7 @@ public class SteamGenerator extends GenericCrafter {
         @Override
         public void buildConfiguration(Table table) {
             table.row();
-            // 打开面板时展开两个配方选项
+            // 始终展开两个配方选项，点击后仅切换配方并高亮选中，不收起为"当前：XXX"
             for (int i = 0; i < 2; i++) {
                 int idx = i;
                 table.button(i == 0 ? "燃料加热（煤）" : "电加热", () -> {
@@ -125,10 +125,6 @@ public class SteamGenerator extends GenericCrafter {
                             currentRecipe = idx;
                             prog = 0f;
                             configure(idx);
-                            // 选择后收起面板，只显示当前配方；下次点机器重新展开
-                            table.clearChildren();
-                            table.row();
-                            table.add("当前：" + (idx == 0 ? "燃料加热（煤）" : "电加热")).pad(10);
                         })
                         .checked(currentRecipe == idx)
                         .size(150, 40).pad(4);
