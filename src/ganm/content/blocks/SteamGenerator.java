@@ -123,16 +123,16 @@ public class SteamGenerator extends GenericCrafter {
         public void displayBars(Table bars) {
             // 电加热配方才显示电力条
             if (currentRecipe == 1) {
-                bars.add(new Bar(() -> "电力", () -> power.status, Pal.powerBar)).growX().height(18f);
+                bars.add(new Bar(() -> "电力", () -> Pal.powerBar, () -> power.status)).growX().height(18f);
             }
             // 燃料加热配方才显示物品(煤)条
             if (currentRecipe == 0) {
-                bars.add(new Bar(() -> "物品", () -> items.total() / (float)itemCapacity, Pal.items)).growX().height(18f);
+                bars.add(new Bar(() -> "物品", () -> Pal.items, () -> items.total() / (float)itemCapacity)).growX().height(18f);
             }
             // 水条总是显示
-            bars.add(new Bar(() -> "水", () -> liquids.currentAmount() / liquidCapacity, liquids.current().color)).growX().height(18f);
+            bars.add(new Bar(() -> "水", () -> liquids.current().color, () -> liquids.currentAmount() / liquidCapacity)).growX().height(18f);
             // 手写进度条（基于 prog / craftTime）
-            bars.add(new Bar(() -> "进度", () -> Mathf.clamp(prog / craftTime[currentRecipe]), Pal.accent)).growX().height(18f);
+            bars.add(new Bar(() -> "进度", () -> Pal.accent, () -> Mathf.clamp(prog / craftTime[currentRecipe]))).growX().height(18f);
         }
 
         @Override
