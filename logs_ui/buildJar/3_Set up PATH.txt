@@ -1,4 +1,0 @@
-﻿2026-09-23T02:28:21.0402955Z ##[group]Run echo "${ANDROID_HOME}/build-tools/34.0.0" >> $GITHUB_PATH
-2026-09-23T02:28:21.0403473Z [36;1mecho "${ANDROID_HOME}/build-tools/34.0.0" >> $GITHUB_PATH[0m
-2026-09-23T02:28:21.0438519Z shell: /usr/bin/bash -e {0}
-2026-09-23T02:28:21.0438809Z ##[endgroup]
