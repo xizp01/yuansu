@@ -1,6 +1,8 @@
 package ganm.content.blocks;
 
+import arc.math.Mathf;
 import arc.scene.ui.Button;
+import arc.scene.ui.layout.Bar;
 import arc.scene.ui.layout.Table;
 import arc.util.Time;
 import arc.util.io.Reads;
@@ -11,6 +13,7 @@ import mindustry.world.blocks.production.GenericCrafter;
 import mindustry.world.consumers.ConsumePower;
 import mindustry.content.*;
 import mindustry.gen.Building;
+import mindustry.graphics.Pal;
 import mindustry.ui.Styles;
 import ganm.content.liquids.Steam;
 
@@ -114,6 +117,18 @@ public class SteamGenerator extends GenericCrafter {
                 if (coalAmt[r] > 0) items.remove(Items.coal, coalAmt[r]);
                 handleLiquid(this, Steam.liquid, steamOut[r]);
             }
+        }
+
+        @Override
+        public void displayBars(Table bars) {
+            // 电加热配方才显示电力条
+            if (currentRecipe == 1) addPowerBar(bars);
+            // 燃料加热配方才显示物品(煤)条
+            if (currentRecipe == 0) addItemBar(bars);
+            // 水条总是显示
+            addLiquidBar(bars);
+            // 手写进度条（基于 prog / craftTime）
+            addBar("progress", () -> new Bar(() -> Mathf.clamp(prog / craftTime[currentRecipe]), () -> Pal.accent));
         }
 
         @Override
